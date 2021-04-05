@@ -23,10 +23,19 @@ def readCSV():
             #print at most granular level. 
             print(row[0],row[1],row[2],row[3],row[4])
 
-def createVarHist():
-    x=1
+def createVarHist(iris_df):
+    
 
-
+    for col_name in col_names:
+        if col_name !="species": # make a histogram
+            plt.figure(figsize = (10, 7))
+            x = iris_df[col_name]
+            
+            plt.hist(x, bins = 20, color = "green")
+            plt.title(col_name)
+            plt.xlabel(col_name + " cm")
+            plt.ylabel("Count")
+            plt.savefig(col_name +".png")
 
 def createVarSummary(dfTmp,varName):
     
@@ -42,13 +51,15 @@ def readintodf():
     #(pandas.DataFrame — pandas 1.2.3 documentation, 2021)
     # Read data from file 'iris.data.csv' 
     # read into dataframe
-    irisDF = pd.read_csv("iris.data.csv",  header = None, names =col_names)
+    iris_df = pd.read_csv("iris.data.csv",  header = None, names =col_names)
     # Preview the first 5 lines of the loaded data 
-    #print(irisDF.head())
+    #print(iris_df.head())
+
+    return(iris_df)
 
 
-
-    attributes_grouped = irisDF.groupby("species").describe()
+def group_by_species(iris_df):
+    attributes_grouped = iris_df.groupby("species").describe()
     #print(attributes_grouped)
     #use attribute names to loop through groups. 
     for col_name in col_names:
@@ -61,15 +72,24 @@ def readintodf():
             createVarSummary(dfTmp,col_name)
 
 
-    for col_name in col_names:
-        if col_name !="species": # make a histograme
+    
 
 
 def test():
     x=x
 
 def main():
-    readintodf()
+    #read csv into a df
+    iris_df = readintodf()
+
+    #print(iris_df)
+
+    #group df
+    group_by_species(iris_df)
+
+    
+    #create histogram for each variable
+    createVarHist(iris_df)
 
 
 

@@ -11,7 +11,7 @@ from csv import reader
 ######################################
 
 
-
+attribute_names  =["sepal length","sepal width","petal length","petal width","species"]
 
 def readCSV():
     #(Lynn, 2021)
@@ -24,30 +24,53 @@ def readCSV():
             print(row[0],row[1],row[2],row[3],row[4])
 
 
+
+def write_To_File():
+    x =1
+
 def readintodf():
     #(pandas.DataFrame — pandas 1.2.3 documentation, 2021)
     # Read data from file 'iris.data.csv' 
  
     # read into dataframe
-    irisDF = pd.read_csv("iris.data.csv",  header = None, names =["sepal length","sepal width","petal length","petal width","species"] )
+    irisDF = pd.read_csv("iris.data.csv",  header = None, names =attribute_names)
     # Preview the first 5 lines of the loaded data 
     #print(irisDF.head())
 
+    
+    
+  
+
+
+
     attributes_grouped = irisDF.groupby("species").describe()
 
-    print(attributes_grouped["sepal length"])
-    print(attributes_grouped["sepal width"])
-    print(attributes_grouped["petal length"])
-    print(attributes_grouped["petal width"])
+   
+    #use attribute names to loop through groups. 
+    for att_name in attribute_names:
+        
+        
+        if att_name !="species": #do not create summary output for species - it is not a group. Enhancements required
+            print(att_name)
+            print (attributes_grouped[att_name])
+            #new df based on group
+            dfTmp = attributes_grouped[att_name]
+            #write to file
+            dfTmp.to_csv(att_name, sep='\t', encoding='utf-8')
 
-    df1_grouped = irisDF.groupby("species").describe()
+    #for group_name, df_group in attributes_grouped:
+        #print (group_name)
+        #attributes_grouped("petal length")
+        
+
+        
+
+
         
       
     
 
-    # print species summary
-    #print (irisDF[irisDF["species"] == "Iris-versicolor"].describe())
-
+  
 
 
 def test():

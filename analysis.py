@@ -14,7 +14,10 @@ import matplotlib.pyplot as plt
 #attribute names, a list used through out the exploratin of the 
 col_names  =["sepal_length","sepal_width","petal_length","petal_ width","species"]
 
-
+def cleanLabel(label):
+    label = label.replace('_',' ')
+    label=label.title()
+    return label
 def readCSV():
     #(Lynn, 2021)
     with open('iris.data.csv', 'r') as reader_object:
@@ -29,11 +32,12 @@ def createVarHist(iris_df):
     for col_name in col_names:
         if col_name !="species": # make a histogram
             plt.figure(figsize = (10, 7))
+            #get x plot
             x = iris_df[col_name]
             
             plt.hist(x, bins = 20, color = "green")
-            plt.title(col_name)
-            plt.xlabel(col_name + " cm")
+            plt.title(cleanLabel(col_name))
+            plt.xlabel(cleanLabel(col_name) + " CM")
             plt.ylabel("Count")
             plt.savefig(col_name +".png")
 
@@ -89,7 +93,7 @@ def main():
     #print(iris_df)
 
     #group df
-    group_by_species(iris_df)
+    createVarHist(iris_df)
 
     
     #create histogram for each variable

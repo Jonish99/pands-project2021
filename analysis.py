@@ -40,8 +40,11 @@ def createVarHist(iris_df):
 def createVarSummary(dfTmp,varName):
     
     
-    Iris_Sum_decs = pd.Series([2,3,2,3,3,3,2], index=['mean', 'std','min','25%','50%','75%','max']) #(pandas.DataFrame.round — pandas 1.2.3 documentation, 2021)
-    dfTmp.round(Iris_Sum_decs)
+   #Iris_Sum_decimals = pd.Series([2,3,2,3,3,3,2], index=['mean', 'std','min','25%','50%','75%','max']) #(pandas.DataFrame.round — pandas 1.2.3 documentation, 2021)
+    dfTmp.round({'mean ':2, 'std ':2,'min ':2,'25% ':2,'50% ':2,'75% ':2,'max ':2}) #Not working
+    ''' 
+    for col in dfTmp.columns:
+        print(col,"!")'''
     print(dfTmp)
     #write to file
     dfTmp.to_csv(varName + ".csv", sep=',', encoding='utf-8')
@@ -79,6 +82,7 @@ def test():
     x=x
 
 def main():
+    #create a menu function to make call variousl anayis methods
     #read csv into a df
     iris_df = readintodf()
 
@@ -89,8 +93,7 @@ def main():
 
     
     #create histogram for each variable
-    createVarHist(iris_df)
-
+   
 
 
 if __name__=="__main__":

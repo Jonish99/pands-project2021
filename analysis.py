@@ -10,6 +10,7 @@ import pandas as pd  #alias pd
 from csv import reader
 import matplotlib.pyplot as plt
 import os #for os path
+from matplotlib.colors import ListedColormap #scatter plot colors
 ######################################
 
 #attribute names, a list used through out the exploratin of the 
@@ -100,26 +101,17 @@ def group_by_species(iris_df):
 
 
 def  createScatterPlots(iris_df):
-    plt.figure()
-    fig,ax=plt.subplots(1,2,figsize=(21, 10))
+      #["sepal_length","sepal_width","petal_length","petal_ width",
+    species = ['Iris-setosa', 'Iris-versicolor', 'Iris-virginica']
+    cmap_bold = ListedColormap(['#FF0000', '#00FF00', '#0000FF'])
+    # create a scatter plot of SEPAL WIDTH versus SEPAL LENGTH and color by SPECIES
+    plt.scatter(iris_df['sepal_length'], iris_df['sepal_width'], c = ['red'],cmap=cmap_bold)
+    plt.title("Sepal Width vs. Sepal Length")
+    plt.xlabel(cleanLabel('sepal_length') + ' CM')
+    plt.ylabel(cleanLabel('sepal_width')  + ' CM')
+    plt.show()
+    #
 
-    setosa.plot(x="SepalLengthCm", y="SepalWidthCm", kind="scatter",ax=ax[0],label='setosa',color='r')
-    versicolor.plot(x="SepalLengthCm",y="SepalWidthCm",kind="scatter",ax=ax[0],label='versicolor',color='b')
-    virginica.plot(x="SepalLengthCm", y="SepalWidthCm", kind="scatter", ax=ax[0], label='virginica', color='g')
-
-    setosa.plot(x="PetalLengthCm", y="PetalWidthCm", kind="scatter",ax=ax[1],label='setosa',color='r')
-    versicolor.plot(x="PetalLengthCm",y="PetalWidthCm",kind="scatter",ax=ax[1],label='versicolor',color='b')
-    virginica.plot(x="PetalLengthCm", y="PetalWidthCm", kind="scatter", ax=ax[1], label='virginica', color='g')
-
-    ax[0].set(title='Sepal comparasion ', ylabel='sepal-width')
-    ax[1].set(title='Petal Comparasion',  ylabel='petal-width')
-    ax[0].legend()
-    ax[1].legend()
-
-
-
-def test():
-    x=x
 
 def main():
     #create a menu function to make call variousl anayis methods
@@ -135,8 +127,8 @@ def main():
     group_by_attribute(iris_df)
     
     #group_by_species(iris_df)
-    
-   
+    #cerate scatter plots for pairs of variables
+    createScatterPlots(iris_df)
 
 
 if __name__=="__main__":

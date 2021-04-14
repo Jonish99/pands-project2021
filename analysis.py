@@ -11,6 +11,9 @@ from csv import reader
 import matplotlib.pyplot as plt
 import os #for os path
 from matplotlib.colors import ListedColormap #scatter plot colors
+#try using seaborn
+import seaborn as sns
+sns.set(style="white", color_codes=True)
 ######################################
 
 #attribute names, a list used through out the exploratin of the 
@@ -109,10 +112,15 @@ def  createScatterPlots(iris_df):
     plt.title("Sepal Width vs. Sepal Length")
     plt.xlabel(cleanLabel('sepal_length') + ' CM')
     plt.ylabel(cleanLabel('sepal_width')  + ' CM')
+    #plt.show()
+    '''now create for 1 pair for 3 species on one plot for each pair combi'''
+
+    #try seaborne
+    sns.jointplot(x="sepal_length", y="sepal_width", data=iris_df, height=6)
+    sns.FacetGrid(iris_df, hue="species", height=5) \
+        .map(plt.scatter, "sepal_length", "sepal_width") \
+        .add_legend()
     plt.show()
-    #
-
-
 def main():
     #create a menu function to make call variousl anayis methods
     #read csv into a df

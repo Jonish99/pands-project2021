@@ -9,6 +9,7 @@
 import pandas as pd  #alias pd
 from csv import reader
 import matplotlib.pyplot as plt
+import os #for os path
 ######################################
 
 #attribute names, a list used through out the exploratin of the 
@@ -62,25 +63,27 @@ def createVarSummary(dfTmp,varName):
 
 
 def group_by_attribute(iris_df):
+
     attributes_grouped = iris_df.groupby("species").describe()
-    #print(attributes_grouped)
-    #use attribute names to loop through groups. 
+    #If Iris_Variable_Summaries.txt already exists, delete to avoid
+    #the same text is not constantly repeated
+    if os.path.exists(''):
+        os.remove("Iris_Variable_Summaries.txt")
+
+    #print (bl_IVS)
     with open('Iris_Variable_Summaries.txt', 'a') as f:
         #write file header
+        
         f.write("This is content of iris dataset grouped by variable and summarised."+'\n'+'\n')
-        for col_name in col_names:
-
-            
+        #use attribute names to loop through groups. 
+        for col_name in col_names:            
             if col_name !="species": #do not create summary output for species - it is not a group. Enhancements required
                 #write variable header, using col name and cleaning using clean label function
-                f.write (cleanLabel(col_name)+'\n'+'\n')
-                #print (attributes_grouped[col_name])
+                f.write (cleanLabel(col_name)+'\n'+'\n')               
                 #new df based on group
                 dfTmp = attributes_grouped[col_name]
                 #Iris_Sum_decimals = pd.Series([2,3,2,3,3,3,2], index=['mean', 'std','min','25%','50%','75%','max']) #(pandas.DataFrame.round — pandas 1.2.3 documentation, 2021)
-                dfTmp.round({'mean ':2, 'std ':2,'min ':2,'25% ':2,'50% ':2,'75% ':2,'max ':2}) #Not working
-            
-                
+                dfTmp.round({'mean ':2, 'std ':2,'min ':2,'25% ':2,'50% ':2,'75% ':2,'max ':2}) #Not working                         
                 dfTmp.to_string(f)
                 f.write ('\n'+'\n')
     f.close()

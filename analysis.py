@@ -59,7 +59,8 @@ def create_var_hist(iris_df,f_action):
             if f_action =='view':
                 plt.show()
             elif f_action=='save':
-                plt.savefig(col_name +".png")
+                #save and clean '(cm)' off file name
+                plt.savefig(col_name.replace('(cm)','') +".png")
      
 
 #Create text file for variable summaries

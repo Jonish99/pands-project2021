@@ -17,7 +17,7 @@ sns.set(style="white", color_codes=True)
 ######################################
 
 #attribute names, a list used through out the exploratin of the 
-col_names  =["sepal_length","sepal_width","petal_length","petal_ width","species"]
+col_names  =['Sepal Length(cm)','Sepal Width(cm)','Petal Length(cm)','Petal Width(cm)','species']
 
 def cleanLabel(label):
     label = label.replace('_',' ')
@@ -42,7 +42,7 @@ def createVarHist(iris_df):
             
             plt.hist(x, bins = 20, color = "green")
             plt.title(cleanLabel(col_name))
-            plt.xlabel(cleanLabel(col_name) + " CM")
+            plt.xlabel(cleanLabel(col_name) )
             plt.ylabel("Count")
             plt.savefig(col_name +".png")
 
@@ -96,7 +96,7 @@ def group_by_attribute(iris_df):
 
 def group_by_species(iris_df):
     #group by species
-    species_grouped = iris_df.groupby("species")
+    species_grouped = iris_df.groupby('species')
     for key, item in species_grouped:
         print (key)
         #print(species_grouped.get_group(key), "\n\n")
@@ -104,22 +104,38 @@ def group_by_species(iris_df):
 
 
 def  createScatterPlots(iris_df):
-      #["sepal_length","sepal_width","petal_length","petal_ width",
-    species = ['Iris-setosa', 'Iris-versicolor', 'Iris-virginica']
-    cmap_bold = ListedColormap(['#FF0000', '#00FF00', '#0000FF'])
+    #["sepal_length","sepal_width","petal_length","petal_ width",
+    #species = ['Iris-setosa', 'Iris-versicolor', 'Iris-virginica']
+    #cmap_bold = ListedColormap(['#FF0000', '#00FF00', '#0000FF'])
     # create a scatter plot of SEPAL WIDTH versus SEPAL LENGTH and color by SPECIES
-    plt.scatter(iris_df['sepal_length'], iris_df['sepal_width'], c = ['red'],cmap=cmap_bold)
-    plt.title("Sepal Width vs. Sepal Length")
-    plt.xlabel(cleanLabel('sepal_length') + ' CM')
-    plt.ylabel(cleanLabel('sepal_width')  + ' CM')
-    #plt.show()
-    '''now create for 1 pair for 3 species on one plot for each pair combi'''
+    #plt.scatter(iris_df['sepal_length'], iris_df['sepal_width'], c = ['red'],cmap=cmap_bold)
+    #plt.title("Sepal Width vs. Sepal Length")
+    #plt.xlabel(cleanLabel('sepal_length') + ' CM')
+    #plt.ylabel(cleanLabel('sepal_width')  + ' CM')
+    #plt.show()'''
+    #'''now create for 1 pair for 3 species on one plot for each pair combi'''
 
     #try seaborne
-    sns.jointplot(x="sepal_length", y="sepal_width", data=iris_df, height=6)
-    sns.FacetGrid(iris_df, hue="species", height=5) \
-        .map(plt.scatter, "sepal_length", "sepal_width") \
-        .add_legend()
+    
+    sns.FacetGrid(iris_df, hue='species', height=5) \
+        .map(plt.scatter, 'Sepal Length(cm)', 'Sepal Width(cm)') \
+        .add_legend() 
+    plt.title('Sepal Length vs. Sepal Width')
+
+    sns.FacetGrid(iris_df, hue='species', height=5) \
+        .map(plt.scatter, 'Sepal Length(cm)', 'Petal Width(cm)') \
+        .add_legend() 
+    plt.title('Sepal Length vs. Petal Width')
+   # sns.jointplot('Sepal Length(cm)', 'Petal Width(cm)'), data=iris_df,kind="kde", space=0, color="g")
+    
+    #iris = sns.load_dataset("iris_df")
+    sns.pairplot(iris_df)
+    
+    plt.show()
+
+
+    g = sns.FacetGrid(iris_df, row='Sepal Length(cm)', col='Petal Width(cm)')
+    #g.map(sns.scatter, "age")
     plt.show()
 def main():
     #create a menu function to make call variousl anayis methods

@@ -45,7 +45,7 @@ def zzzcreate_var_summary(dfTmp,varName):
         f.write ('\n'+'\n')
         f.close()
 
-def create_Var_Hist(iris_df):
+def create_var_hist(iris_df,f_action):
     
     for col_name in col_names:
         if col_name !="species": # make a histogram
@@ -56,33 +56,40 @@ def create_Var_Hist(iris_df):
             plt.title(cleanLabel(col_name))
             plt.xlabel(cleanLabel(col_name) )
             plt.ylabel("Count")
-            plt.savefig(col_name +".png")
+            if f_action =='view':
+                plt.show()
+            elif f_action=='save':
+                plt.savefig(col_name +".png")
      
 
 #Create text file for variable summaries
-def create_var_summary(iris_df):
+def create_var_summary(iris_df,f_action):
     #use the groupby method to group the dataframe by the columnspecies, 
     #this will group the other four columns(variables) based on unique cells in species (ie 3 species rows in 4 column groups).
     #The describe method creates statistical analyis for each variable.
     attributes_grouped = iris_df.groupby("species").describe()
     #print(attributes_grouped)
-    #open a new copy/overwrite(w) existing verision of txt file to save summaries to.
-    with open('Iris_Variable_Summaries.txt', 'w') as f:
-        #write file header
-        f.write("This file contains statistical summaries of each variable in the iris dataset ."+'\n'+'\n')
-        #use attribute names to loop through groups. 
-        #i.e. for each variable in the list do...
-        for col_name in col_names:            
-            if col_name !="species": #do not create summary output for species - it is not a group. 
-                #write variable summary headerheader, using col name and cleaning using clean label function
-                f.write (cleanLabel(col_name)+'\n'+'\n')               
-                #new df based on group
-                dfTmp = attributes_grouped[col_name]
-                #Iris_Sum_decimals = pd.Series([2,3,2,3,3,3,2], index=['mean', 'std','min','25%','50%','75%','max']) #(pandas.DataFrame.round — pandas 1.2.3 documentation, 2021)
-                dfTmp.round({'mean ':2, 'std ':2,'min ':2,'25% ':2,'50% ':2,'75% ':2,'max ':2}) #Not working                         
-                dfTmp.to_string(f)
-                f.write ('\n'+'\n')    
-    f.close()
+    if f_action=='view':
+        print(attributes_grouped)
+        x = input("Press any key to return to menu: ")
+    elif f_action=='save':
+        #open a new copy/overwrite(w) existing verision of txt file to save summaries to.
+        with open('Iris_Variable_Summaries.txt', 'w') as f:
+            #write file header
+            f.write("This file contains statistical summaries of each variable in the iris dataset ."+'\n'+'\n')
+            #use attribute names to loop through groups. 
+            #i.e. for each variable in the list do...
+            for col_name in col_names:            
+                if col_name !="species": #do not create summary output for species - it is not a group. 
+                    #write variable summary headerheader, using col name and cleaning using clean label function
+                    f.write (cleanLabel(col_name)+'\n'+'\n')               
+                    #new df based on group
+                    dfTmp = attributes_grouped[col_name]
+                    #Iris_Sum_decimals = pd.Series([2,3,2,3,3,3,2], index=['mean', 'std','min','25%','50%','75%','max']) #(pandas.DataFrame.round — pandas 1.2.3 documentation, 2021)
+                    dfTmp.round({'mean ':2, 'std ':2,'min ':2,'25% ':2,'50% ':2,'75% ':2,'max ':2}) #Not working                         
+                    dfTmp.to_string(f)
+                    f.write ('\n'+'\n')    
+        f.close()
 
 def group_by_species(iris_df):
     #group by species
@@ -93,7 +100,7 @@ def group_by_species(iris_df):
  
 
 #Create scatter plots for variable pair combination
-def  create_scatter_plots(iris_df):
+def  create_scatter_plots(iris_df,f_action):
     #Using the seaborn library to great scatter plots for each pair of variables
     #load iris df, use hue to create different colors for each species/class
     #1. 'Sepal Length(cm)', 'Sepal Width(cm)'
@@ -102,15 +109,22 @@ def  create_scatter_plots(iris_df):
         .add_legend() 
     #set title
     plt.title('1. Sepal Length vs. Sepal Width')
+    if f_action =='view':
+        plt.show()
+    elif f_action =='save':
+        plt.savefig('1. Sepal Length vs. Sepal Width' +'.png')
     #############
     sns.FacetGrid(iris_df, hue='species', height=5) \
         .map(plt.scatter, 'Sepal Length(cm)', 'Petal Width(cm)') \
         .add_legend() 
     plt.title('2. Sepal Length vs. Petal Width')
+    if f_action =='view':
+        plt.show()
+    elif f_action =='save':
+        plt.savefig('2. Sepal Length vs. Petal Width' +'.png')
 
 
-
-def grahical_summary(iris_df):
+def grahical_summary(iris_df,f_action):
     #The six possible pair comparions are best shown together, to determine which (if any)
     #are better identifiers of species.
     #Markers and hue enable different identification of each species
@@ -123,8 +137,11 @@ def grahical_summary(iris_df):
 
     g=sns.pairplot(iris_df, hue="species",markers=["o", "s", "D"], corner=True,diag_kind="hist")
     #use suptitle to add title to whole graphci 
-    g.fig.suptitle("Grapical summary of paried variable combinations of the Iris Dataset") 
-    plt.show()
+    g.fig.suptitle("Graphical summary of paried variable combinations of the Iris Dataset") 
+    if f_action =='view':
+        plt.show()
+    elif f_action =='save':
+        plt.savefig('Graphical Summary' +'.png')
 
 def displayMenu():
     #output initial menu with command and instructions for the user.
@@ -164,35 +181,38 @@ def main():
            
     #use choice input to control flow of main while loop.
     while(choice != 'q'):
-        print("In while")
+        #print("In while")
+        
+        
     # we could do this with lamda functions# I am keeping this basic for the moment
         #1 View variable summaries
         if choice == '1':
-            create_var_summary(iris_df)
+            create_var_summary(iris_df,'view')
         #2 Save variable summaries to txt file
         elif choice == '2':
-            create_var_summary(iris_df)
+            create_var_summary(iris_df,'save')
         #3 View histogram for each variable
         elif choice == '3':
-            create_Var_Hist(iris_df)
+            create_var_hist(iris_df,'view')
         #4 Save histogram for each variable to png file
         elif choice == '4':
-            create_Var_Hist(iris_df)
+            create_var_hist(iris_df,'save')
         #5 View scatter plot for each variable pair comination
         elif choice == '5':
-            create_scatter_plots(iris_df)
+            create_scatter_plots(iris_df,'view')
         #6 Save scatter plot for each variable pair comination to png file
         elif choice == '6':
-            create_scatter_plots(iris_df)
+            create_scatter_plots(iris_df,'save')
         #7 View graphcial summary with species identified
         elif choice == '7':
-            grahical_summary(iris_df)
+            grahical_summary(iris_df,'view')
         #8 Save graphical with species identified
         elif choice == '8':
-            grahical_summary(iris_df)
+            grahical_summary(iris_df,'save')
         else:
         #call dsiplay menu to get user choice
             print("Invalid input, plese input an option from the menu.")
+        print("here")
         choice=displayMenu()
 
             

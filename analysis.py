@@ -17,6 +17,7 @@ import seaborn as sns
 
 #attribute names, a tuple used through out the exploration of the data set. 
 col_names  =('Sepal Length(cm)','Sepal Width(cm)','Petal Length(cm)','Petal Width(cm)','species')
+attributes  =('Sepal Length(cm)','Sepal Width(cm)','Petal Length(cm)','Petal Width(cm)')
 #species tuple
 species=('Iris-setosa','Iris-versicolor','Iris-virginica')
 #===================================== FUNCTIONS =================================
@@ -47,10 +48,9 @@ def create_var_summary(iris_df,f_action):
     
     if f_action=='view':
         #print each group stacked vertically
-        for col_name in col_names:
-            if col_name !="species": #do not create summary output for species - it is not a group.  
-                print(cleanLabel(col_name))
-                print(attributes_grouped[col_name], "\n\n")
+        for attr in attributes:            
+            print(cleanLabel(attr))
+            print(attributes_grouped[attr], "\n\n")
         #use input any key to pause the while loop, whilst use assimilates output.
         x = input("Press any key to return to menu: ")
     elif f_action=='save':
@@ -60,69 +60,49 @@ def create_var_summary(iris_df,f_action):
             f.write("This file contains statistical summaries of each variable in the iris dataset ."+'\n'+'\n')
             #use attribute names to loop through groups. 
             #i.e. for each variable in the list do...
-            for col_name in col_names:            
-                if col_name !="species": #do not create summary output for species - it is not a group. 
-                    #write variable summary headerheader, using col name and cleaning using clean label function
-                    f.write (cleanLabel(col_name)+'\n'+'\n')               
-                    #new df based on group
-                    dfTmp = attributes_grouped[col_name]
-                    #Iris_Sum_decimals = pd.Series([2,3,2,3,3,3,2], index=['mean', 'std','min','25%','50%','75%','max']) #(pandas.DataFrame.round — pandas 1.2.3 documentation, 2021)
-                    dfTmp.round({'mean ':2, 'std ':2,'min ':2,'25% ':2,'50% ':2,'75% ':2,'max ':2}) #Not working                         
-                    dfTmp.to_string(f)
-                    f.write ('\n'+'\n')    
+            for attr in attributes:         
+            
+                #write variable summary headerheader, using col name and cleaning using clean label function
+                f.write (cleanLabel(attr)+'\n'+'\n')               
+                #new df based on group
+                dfTmp = attributes_grouped[attr]
+                #Iris_Sum_decimals = pd.Series([2,3,2,3,3,3,2], index=['mean', 'std','min','25%','50%','75%','max']) #(pandas.DataFrame.round — pandas 1.2.3 documentation, 2021)
+                dfTmp.round({'mean ':2, 'std ':2,'min ':2,'25% ':2,'50% ':2,'75% ':2,'max ':2}) #Not working                         
+                dfTmp.to_string(f)
+                f.write ('\n'+'\n')    
         f.close()
 
-  getSpec_dfs():
-    #Get each species into one dataframe
-    ir_set = global
-    ir_ver =global
-    ir_vig =global
 
-    ir_set =iris_df[iris_df.species=="Iris-setosa"]
-    ir_ver =iris_df[iris_df.species=="Iris-versicolor"]
-    ir_vig =iris_df[iris_df.species=="Iris-virginica"]
-    return ir_set,ir_ver,ir_vig
 #=================================================================================
 
 #Create variable histograms, menu choices 3 & 4
 def create_var_hist(iris_df,f_action):
     #Get each species into one dataframe
-    ir_set = global
-    ir_ver =global
-    ir_vig =global
-
-    getSpec_dfs(iris_df)
-    
-
+    ir_set =iris_df[iris_df.species=="Iris-setosa"]
+    ir_ver =iris_df[iris_df.species=="Iris-versicolor"]
+    ir_vig =iris_df[iris_df.species=="Iris-virginica"]
 
     sns.set(style="white", color_codes=True)
     #sns.set_palette("husl")
     
-    for col_name in col_names:
-        if col_name !="species": # make a histogram
-            plt.figure(figsize = (10, 7))
-            #get x plot
-            #load each each species into a separate dataframe
-            sns.distplot(ir_set[col_name],  kde=False, label='Iris-setosa',color='red')
-            sns.distplot(ir_ver[col_name],  kde=False, label='Iris-versicolor',color='green')
-            sns.distplot(ir_vig[col_name],  kde=False, label='Iris-virginica',color='blue')
-             #species=('Iris-setosa','Iris-versicolor','Iris-virginica')   
+    for attr in attributes:
+        
+        plt.figure(figsize = (10, 7))
+        #load each each species into a separate dataframe
+        sns.distplot(ir_set[attr],  kde=False, label='Iris-setosa',color='red')
+        sns.distplot(ir_ver[attr],  kde=False, label='Iris-versicolor',color='green')
+        sns.distplot(ir_vig[attr],  kde=False, label='Iris-virginica',color='blue')
             
-            plt.legend()
-            plt.title(cleanLabel(col_name))
-            plt.xlabel(cleanLabel(col_name) )
-            plt.xlabel('Frequency' )
-            #plt.ylabel("Count")
-
-
-            
-  
-            
-            if f_action =='view':
-                plt.show()
-            elif f_action=='save':
-                #save and clean '(cm)' off file name
-                plt.savefig(col_name.replace('(cm)','') +".png")
+        plt.legend()
+        plt.title(cleanLabel(attr))
+        plt.xlabel(cleanLabel(attr) )
+        plt.xlabel('Frequency' )       
+        
+        if f_action =='view':
+            plt.show()
+        elif f_action=='save':
+        #save and clean '(cm)' off file name
+            plt.savefig(attr.replace('(cm)','') +".png")
      
 
 #=================================================================================
@@ -167,7 +147,7 @@ def grahical_summary(iris_df,f_action):
     #set the style parameter and colors for this use of seaborn
     sns.set(style="white", color_codes=True)
 
-    g=sns.pairplot(iris_df, hue="species",markers=["o", "s", "D"], corner=True,diag_kind="hist")
+    g=sns.pairplot(iris_df, hue="species",markers=["o", "s", "d"], corner=True,diag_kind="hist")
     #use suptitle to add title to whole graphci 
     g.fig.suptitle("Graphical summary of paried variable combinations of the Iris Dataset") 
     if f_action =='view':
@@ -208,7 +188,7 @@ def main():
 
     #call readCSV to get Iris dataset as dataframe
     iris_df=readCSV()
-    #print(iris_df)
+    print(iris_df)
     
     #call display menu function
     choice = str(displayMenu())    

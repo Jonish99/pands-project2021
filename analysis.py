@@ -1,4 +1,5 @@
-'''A program that will investigate the Iris dataset. GMIT - GA_KDATG_L08 Y4. Programming and Scripting Project 2021'''
+'''A program that will investigate the Iris dataset. 
+GMIT - GA_KDATG_L08 Y4. Programming and Scripting Project 2021'''
 
 #Author: Jon Ishaque G00398244
 
@@ -14,16 +15,16 @@ import os #for os path
 import seaborn as sns
 #=================================================================================
 
-#attribute names, a list used through out the exploratin of the. These column title 
-#are available as an externally imported list but, like the Iris dataset itself are 
-#manually added to this functionality.
+#attribute names, a tuple used through out the exploration of the data set. 
 col_names  =('Sepal Length(cm)','Sepal Width(cm)','Petal Length(cm)','Petal Width(cm)','species')
-
+#species tuple
+species=('Iris-setosa','Iris-versicolor','Iris-virginica')
 #===================================== FUNCTIONS =================================
 
 def cleanLabel(label):
     label = label.replace('_',' ')
     label=label.title()
+    label = label.replace('(Cm)','(cm) ')
     return label
 
 #=================================================================================
@@ -43,7 +44,7 @@ def create_var_summary(iris_df,f_action):
     #(ie 3 species rows in 4 column groups).
     #The describe method creates statistical analyis for each variable.
     attributes_grouped = iris_df.groupby("species").describe()
-    print(attributes_grouped)
+    
     if f_action=='view':
         #print each group stacked vertically
         for col_name in col_names:
@@ -71,20 +72,52 @@ def create_var_summary(iris_df,f_action):
                     f.write ('\n'+'\n')    
         f.close()
 
+  getSpec_dfs():
+    #Get each species into one dataframe
+    ir_set = global
+    ir_ver =global
+    ir_vig =global
+
+    ir_set =iris_df[iris_df.species=="Iris-setosa"]
+    ir_ver =iris_df[iris_df.species=="Iris-versicolor"]
+    ir_vig =iris_df[iris_df.species=="Iris-virginica"]
+    return ir_set,ir_ver,ir_vig
 #=================================================================================
 
 #Create variable histograms, menu choices 3 & 4
 def create_var_hist(iris_df,f_action):
+    #Get each species into one dataframe
+    ir_set = global
+    ir_ver =global
+    ir_vig =global
+
+    getSpec_dfs(iris_df)
+    
+
+
+    sns.set(style="white", color_codes=True)
+    #sns.set_palette("husl")
     
     for col_name in col_names:
         if col_name !="species": # make a histogram
             plt.figure(figsize = (10, 7))
             #get x plot
-            x = iris_df[col_name]
-            plt.hist(x, bins = 20, color = "green")
+            #load each each species into a separate dataframe
+            sns.distplot(ir_set[col_name],  kde=False, label='Iris-setosa',color='red')
+            sns.distplot(ir_ver[col_name],  kde=False, label='Iris-versicolor',color='green')
+            sns.distplot(ir_vig[col_name],  kde=False, label='Iris-virginica',color='blue')
+             #species=('Iris-setosa','Iris-versicolor','Iris-virginica')   
+            
+            plt.legend()
             plt.title(cleanLabel(col_name))
             plt.xlabel(cleanLabel(col_name) )
-            plt.ylabel("Count")
+            plt.xlabel('Frequency' )
+            #plt.ylabel("Count")
+
+
+            
+  
+            
             if f_action =='view':
                 plt.show()
             elif f_action=='save':
@@ -142,11 +175,14 @@ def grahical_summary(iris_df,f_action):
     elif f_action =='save':
         plt.savefig('Graphical Summary' +'.png')
 
-#=================================================================================
+
+
 
 def displayMenu():
     #output initial menu with command and instructions for the user.
-    print('Blurb abou the menu')
+    print('Please select one of the choices below to explor the Iris data set')
+    print('Each functions of the program has a pair of options, on which allow you to save the output, the other view it on screen')
+    print('The option list progresses in complexity of analyis, the higher the numeric choce. Some users may choose to do this to and gradually explore the data set, others may chose to dive in.')
     #Output user choices
     print("What would you like to do?")
     print("\t(1) View variable summaries")
@@ -155,8 +191,10 @@ def displayMenu():
     print("\t(4) Save histogram for each variable to png file")
     print("\t(5) View scatter plot for each variable pair comination")
     print("\t(6) Save scatter plot for each variable pair comination to png file")
-    print("\t(7) View all scatter plots and histograms with species identified")
-    print("\t(8) Save all scatter plots and histograms with species identified")    
+    print("\t(7) View all box plots and histograms with species identified")
+    print("\t(8) Save all box plots and histograms with species identified")   
+    print("\t(9) View all scatter plots and histograms with species identified")
+    print("\t(10) Save all scatter plots and histograms with species identified")  
     print("\t(q) Quit")
     #get user choice
     choice = input("Select a choice from the above menu: ").strip()
@@ -198,11 +236,17 @@ def main():
         #6 Save scatter plot for each variable pair comination to png file
         elif choice == '6':
             create_scatter_plots(iris_df,'save')
-        #7 View graphcial summary with species identified
+        #7 View box plot summary with species identified
         elif choice == '7':
-            grahical_summary(iris_df,'view')
-        #8 Save graphical with species identified
+            box_plot(iris_df,'view')
+        #8 Save box lot with species identified
         elif choice == '8':
+            box_plot(iris_df,'save')
+        #8 Save graphical with species identified
+        elif choice == '9':
+            grahical_summary(iris_df,'view')
+        #10 Save graphical with species identified
+        elif choice == '10':
             grahical_summary(iris_df,'save')
         else:
         #call dsiplay menu to get user choice

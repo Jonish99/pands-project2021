@@ -124,7 +124,7 @@ def  create_scatter_plots(iris_df,f_action):
         .map(plt.scatter, 'Sepal Width(cm)', 'Sepal Length(cm)') \
         .add_legend() 
     #set title
-    sctTitle = '1. Sepal Width vs. Spal Length'
+    sctTitle = '1. Sepal Width vs. Sepal Length'
     plt.title(sctTitle)
     if f_action =='view':
         plt.show()

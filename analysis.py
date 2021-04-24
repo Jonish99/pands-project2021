@@ -8,11 +8,13 @@ GMIT - GA_KDATG_L08 Y4. Programming and Scripting Project 2021'''
 #====================================IMPORTS==================================
 #IMPORTS
 import pandas as pd  #alias pd
-from csv import reader
+
 import matplotlib.pyplot as plt #alias plt
-import os #for os path
+#import os #for os path
 #from matplotlib.colors import ListedColormap #scatter plot colors
 import seaborn as sns
+#create a palette to be used in the scatter plot which will be consistent with individual histograms
+palette=['red','green','blue']
 #=================================================================================
 
 #attribute names, a tuple used through out the exploration of the data set. 
@@ -37,7 +39,7 @@ def readCSV():
     return irisdf
 
 #=================================================================================
-
+#Menu choices 1 & 2
 #Create variable summaries, menu choices 1 & 2
 def create_var_summary(iris_df,f_action):
     #use the groupby method to group the dataframe by the columnspecies, 
@@ -74,8 +76,11 @@ def create_var_summary(iris_df,f_action):
 
 
 #=================================================================================
-
-#Create variable histograms, menu choices 3 & 4
+#Menu choices 3 & 4
+#Create variable histogram
+#A useful enhnacement that I was not able to create would be to loop through each of the species.
+#I was not able implement this. Arguabably a nested loop here may be too complicated.
+#=================================================================================
 def create_var_hist(iris_df,f_action):
     #Get each species into one dataframe
     ir_set =iris_df[iris_df.species=="Iris-setosa"]
@@ -89,9 +94,9 @@ def create_var_hist(iris_df,f_action):
         
         plt.figure(figsize = (10, 7))
         #load each each species into a separate dataframe
-        sns.distplot(ir_set[attr],  kde=False, label='Iris-setosa',color='red')
-        sns.distplot(ir_ver[attr],  kde=False, label='Iris-versicolor',color='green')
-        sns.distplot(ir_vig[attr],  kde=False, label='Iris-virginica',color='blue')
+        sns.histplot(ir_set[attr],  kde=False, label='Iris-setosa',color='red')
+        sns.histplot(ir_ver[attr],  kde=False, label='Iris-versicolor',color='green')
+        sns.histplot(ir_vig[attr],  kde=False, label='Iris-virginica',color='blue')
             
         plt.legend()
         plt.title(cleanLabel(attr))
@@ -106,8 +111,9 @@ def create_var_hist(iris_df,f_action):
      
 
 #=================================================================================
-
-#Create scatter plots for variable pair combination, menu choices, 5 & 6
+# menu choices 5 & 6
+#Create scatter plots for variable pair combination, 
+#=================================================================================
 def  create_scatter_plots(iris_df,f_action):
     #Using the seaborn library to great scatter plots for each pair of variables
     #load iris df, use hue to create different colors for each species/class
@@ -132,24 +138,25 @@ def  create_scatter_plots(iris_df,f_action):
         plt.savefig('2. Sepal Length vs. Petal Width' +'.png')
 
 #=================================================================================
-
+# menu choices, 7 & 8
 #Create overall graphical summary, menu choices 7 & 8
+#=================================================================================
 def grahical_summary(iris_df,f_action):
     #The six possible pair comparions are best shown together, to determine which (if any)
     #are better identifiers of species.
-    #Markers and hue enable different identification of each species
+    #Hue enable different identification of each species by assigning a different color to each species
     #the corner parameter enable the plot to show just one half of the diagonal. 
     #The benefit of this is that whilst seeing the plots together is very useful, 
     #repeating the same plots with the axes inverted is too much information. 
-    #the diagonal in this example produce historgrams, for each of the four variables, 
-    # with the 3 species overlain ach other.
+    #the diagonal in this example produced historgrams, for each of the four variables, 
+    # with the 3 species overlain one another. Other diagonal plots could be used for to visualise each of the four variables.
 
     #set the style parameter and colors for this use of seaborn
     sns.set(style="white", color_codes=True)
-
-    g=sns.pairplot(iris_df, hue="species",markers=["o", "s", "d"], corner=True,diag_kind="hist")
+    
+    g=sns.pairplot(iris_df, hue="species", corner=True,diag_kind="hist",palette=['red','green','blue'])
     #use suptitle to add title to whole graphci 
-    g.fig.suptitle("Graphical summary of paried variable combinations of the Iris Dataset") 
+    g.fig.suptitle("Graphical summary of paired variable combinations of the Iris Dataset") 
     if f_action =='view':
         plt.show()
     elif f_action =='save':
@@ -157,12 +164,12 @@ def grahical_summary(iris_df,f_action):
 
 
 
-
+#=================================================================================
 def displayMenu():
     #output initial menu with command and instructions for the user.
     print('Please select one of the choices below to explor the Iris data set')
     print('Each functions of the program has a pair of options, on which allow you to save the output, the other view it on screen')
-    print('The option list progresses in complexity of analyis, the higher the numeric choce. Some users may choose to do this to and gradually explore the data set, others may chose to dive in.')
+    print('The option list progresses in complexity of analyis, the higher the numeric choce. Some users may choose to do this to and gradually explore the data set, others may choose to dive in.')
     #Output user choices
     print("What would you like to do?")
     print("\t(1) View variable summaries")

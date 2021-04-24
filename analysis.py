@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt #alias plt
 #from matplotlib.colors import ListedColormap #scatter plot colors
 import seaborn as sns
 #create a palette to be used in the scatter plot which will be consistent with individual histograms
-palette=['red','green','blue']
+IrisPallette=['red','green','blue']
 #=================================================================================
 
 #attribute names, a tuple used through out the exploration of the data set. 
@@ -117,25 +117,82 @@ def create_var_hist(iris_df,f_action):
 def  create_scatter_plots(iris_df,f_action):
     #Using the seaborn library to great scatter plots for each pair of variables
     #load iris df, use hue to create different colors for each species/class
-    #1. 'Sepal Length(cm)', 'Sepal Width(cm)'
-    sns.FacetGrid(iris_df, hue='species', height=5) \
-        .map(plt.scatter, 'Sepal Length(cm)', 'Sepal Width(cm)') \
+    #===================================================================
+    #1. Sepal Width(cm)', 'Sepal Length(cm)
+    #===================================================================
+    sns.FacetGrid(iris_df, hue='species', height=5,palette=IrisPallette) \
+        .map(plt.scatter, 'Sepal Width(cm)', 'Sepal Length(cm)') \
         .add_legend() 
     #set title
-    plt.title('1. Sepal Length vs. Sepal Width')
+    sctTitle = '1. Sepal Width vs. Spal Length'
+    plt.title(sctTitle)
     if f_action =='view':
         plt.show()
     elif f_action =='save':
-        plt.savefig('1. Sepal Length vs. Sepal Width' +'.png')
-    #############
-    sns.FacetGrid(iris_df, hue='species', height=5) \
-        .map(plt.scatter, 'Sepal Length(cm)', 'Petal Width(cm)') \
+        plt.savefig(sctTitle +'.png')
+    #===================================================================
+    #2. Petal Length(cm)', 'Sepal Length(cm)
+    #===================================================================
+    sns.FacetGrid(iris_df, hue='species', height=5,palette=IrisPallette) \
+        .map(plt.scatter, 'Petal Length(cm)', 'Sepal Length(cm)') \
         .add_legend() 
-    plt.title('2. Sepal Length vs. Petal Width')
+    sctTitle='2. Petal Length vs. Sepal Length'
+    plt.title(sctTitle)
     if f_action =='view':
         plt.show()
     elif f_action =='save':
-        plt.savefig('2. Sepal Length vs. Petal Width' +'.png')
+        plt.savefig(sctTitle +'.png')
+    #===================================================================
+    #3. Petal Length(cm)', 'Sepal Width(cm)
+
+    #===================================================================
+    sns.FacetGrid(iris_df, hue='species', height=5,palette=IrisPallette) \
+        .map(plt.scatter, 'Petal Length(cm)', 'Sepal Width(cm)') \
+        .add_legend() 
+    sctTitle='3. Petal Length vs. Sepal Width'
+    plt.title(sctTitle)
+    if f_action =='view':
+        plt.show()
+    elif f_action =='save':
+        plt.savefig(sctTitle +'.png')
+    
+    #===================================================================
+    #4. Petal Width(cm)', 'Sepal Length(cm)
+    #===================================================================
+    sns.FacetGrid(iris_df, hue='species', height=5,palette=IrisPallette) \
+        .map(plt.scatter, 'Petal Width(cm)', 'Sepal Length(cm)') \
+        .add_legend() 
+    sctTitle='4. Petal Width vs. Sepal Length'
+    plt.title(sctTitle)
+    if f_action =='view':
+        plt.show()
+    elif f_action =='save':
+        plt.savefig(sctTitle +'.png')
+    
+    #===================================================================
+    #5. Petal Width(cm)', 'Sepal Width(cm)
+    #===================================================================
+    sns.FacetGrid(iris_df, hue='species', height=5,palette=IrisPallette) \
+        .map(plt.scatter, 'Petal Width(cm)', 'Sepal Width(cm)') \
+        .add_legend() 
+    sctTitle='5. Petal Width vs. Sepal Width'
+    plt.title(sctTitle)
+    if f_action =='view':
+        plt.show()
+    elif f_action =='save':
+        plt.savefig(sctTitle +'.png')
+    #===================================================================
+    #5. Petal Width(cm)', 'Sepal Width(cm)
+    #===================================================================
+    sns.FacetGrid(iris_df, hue='species', height=5,palette=IrisPallette) \
+        .map(plt.scatter, 'Petal Width(cm)', 'Petal Length(cm)') \
+        .add_legend() 
+    sctTitle='6. Petal Width vs. Petal Length'
+    plt.title(sctTitle)
+    if f_action =='view':
+        plt.show()
+    elif f_action =='save':
+        plt.savefig(sctTitle +'.png')
 
 #=================================================================================
 # menu choices, 7 & 8
@@ -154,7 +211,7 @@ def grahical_summary(iris_df,f_action):
     #set the style parameter and colors for this use of seaborn
     sns.set(style="white", color_codes=True)
     
-    g=sns.pairplot(iris_df, hue="species", corner=True,diag_kind="hist",palette=['red','green','blue'])
+    g=sns.pairplot(iris_df, hue="species", corner=True,diag_kind="hist",palette=IrisPallette)
     #use suptitle to add title to whole graphci 
     g.fig.suptitle("Graphical summary of paired variable combinations of the Iris Dataset") 
     if f_action =='view':

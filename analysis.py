@@ -119,9 +119,10 @@ def create_var_hist(iris_df,f_action):
         sns.histplot(ir_vig[attr],  kde=False, label='Iris-virginica',color='blue')
             
         plt.legend()
-        plt.title(cleanLabel(attr))
+        hsTitle = ('Histogram showing {} frequency for the Iris data set').format(cleanLabel(attr))
+        plt.title(hsTitle)
         plt.xlabel(cleanLabel(attr) )
-        plt.xlabel('Frequency' )       
+        plt.ylabel('Frequency' )       
         
         if f_action =='view':
             plt.show()
@@ -134,12 +135,6 @@ def create_var_hist(iris_df,f_action):
 # menu choices 5 & 6
 #Create scatter plots for variable pair combination, 
 #=================================================================================
-# All possible pairs in List
-# Using combinations()
-varPairs = list(combinations(attributes, 2))
-print(varPairs)
-
-
 
 
 def  create_scatter_plots(iris_df,f_action):
@@ -147,23 +142,33 @@ def  create_scatter_plots(iris_df,f_action):
     # All possible pairs in List
     # Using combinations()
     varPairs = list(combinations(attributes, 2))
-    print(varPairs)
+    #print(varPairs)
+    #counter for file and title number
     i = 1
+    
+    #loop through each pair creating a scatter
+    #use seaborn facetgrid. pass dataframe, hue makes each species a different colour
     for y,x in varPairs:
         sns.FacetGrid(iris_df, hue='species', height=5,palette=IrisPallette) \
             .map(plt.scatter, y, x) \
             .add_legend() 
         #set title
-        sctTitle = str(i) +'. ' + y +' vs.' + x
+        sctTitle = str(i) +'. ' + y +' vs.' + x 
+        sctTitle = sctTitle.replace('(cm)','')
+        
         plt.title(sctTitle)
+        #adujst top of plot to prevent title being cut off.
+        plt.subplots_adjust(top=0.88)
         if f_action =='view':
             plt.show()
         elif f_action =='save':
             plt.savefig(sctTitle +'.png')
-        i =+1 
+        
+        i += 1 
+        #print (sctTitle)
 
     
-'''
+
 #=================================================================================
 # menu choices, 7 & 8
 #Create overall graphical summary, menu choices 7 & 8
@@ -204,11 +209,9 @@ def displayMenu():
     print("\t(3) View histogram for each variable")
     print("\t(4) Save histogram for each variable to png file")
     print("\t(5) View scatter plot for each variable pair comination")
-    print("\t(6) Save scatter plot for each variable pair comination to png file")
-    print("\t(7) View all box plots and histograms with species identified")
-    print("\t(8) Save all box plots and histograms with species identified")   
-    print("\t(9) View all scatter plots and histograms with species identified")
-    print("\t(10) Save all scatter plots and histograms with species identified")  
+    print("\t(6) Save scatter plot for each variable pair comination to png file")  
+    print("\t(7) View all scatter plots and histograms with species identified")
+    print("\t(8) Save all scatter plots and histograms with species identified")  
     print("\t(q) Quit")
     #get user choice
     choice = input("Select a choice from the above menu: ").strip()
@@ -222,7 +225,7 @@ def main():
 
     #call readCSV to get Iris dataset as dataframe
     iris_df=readCSV()
-    print(iris_df)
+    #print(iris_df)
     
     #call display menu function
     choice = str(displayMenu())    
@@ -250,22 +253,16 @@ def main():
         #6 Save scatter plot for each variable pair comination to png file
         elif choice == '6':
             create_scatter_plots(iris_df,'save')
-        #7 View box plot summary with species identified
-        elif choice == '7':
-            box_plot(iris_df,'view')
-        #8 Save box lot with species identified
-        elif choice == '8':
-            box_plot(iris_df,'save')
         #8 Save graphical with species identified
-        elif choice == '9':
+        elif choice == '7':
             grahical_summary(iris_df,'view')
         #10 Save graphical with species identified
-        elif choice == '10':
+        elif choice == '8':
             grahical_summary(iris_df,'save')
         else:
         #call dsiplay menu to get user choice
             print("Invalid input, plese input an option from the menu.")
-        print("here")
+        #print("here")
         choice=displayMenu()
 
             

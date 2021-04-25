@@ -8,6 +8,7 @@ GMIT - GA_KDATG_L08 Y4. Programming and Scripting Project 2021'''
 #====================================IMPORTS==================================
 #IMPORTS
 import pandas as pd  #alias pd
+from itertools import combinations
 
 import matplotlib.pyplot as plt #alias plt
 #import os #for os path
@@ -31,6 +32,25 @@ def cleanLabel(label):
     return label
 
 #=================================================================================
+#https://stackoverflow.com/questions/5360220/how-to-split-a-list-into-pairs-in-all-possible-ways
+#Lifted directly from above
+
+def all_pairs(lst):
+    if len(lst) < 2:
+        yield []
+        return
+    if len(lst) % 2 == 1:
+        # Handle odd length list
+        for i in range(len(lst)):
+            for result in all_pairs(lst[:i] + lst[i+1:]):
+                yield result
+    else:
+        a = lst[0]
+        for i in range(1,len(lst)):
+            pair = (a,lst[i])
+            for rest in all_pairs(lst[1:i]+lst[i+1:]):
+                yield [pair] + rest
+
 
 def readCSV():
     #Read the whole csv file into the  a pandas dataframe, irisdf - used through this program
@@ -114,86 +134,36 @@ def create_var_hist(iris_df,f_action):
 # menu choices 5 & 6
 #Create scatter plots for variable pair combination, 
 #=================================================================================
+# All possible pairs in List
+# Using combinations()
+varPairs = list(combinations(attributes, 2))
+print(varPairs)
+
+
+
+
 def  create_scatter_plots(iris_df,f_action):
-    #Using the seaborn library to great scatter plots for each pair of variables
-    #load iris df, use hue to create different colors for each species/class
-    #===================================================================
-    #1. Sepal Width(cm)', 'Sepal Length(cm)
-    #===================================================================
-    sns.FacetGrid(iris_df, hue='species', height=5,palette=IrisPallette) \
-        .map(plt.scatter, 'Sepal Width(cm)', 'Sepal Length(cm)') \
-        .add_legend() 
-    #set title
-    sctTitle = '1. Sepal Width vs. Sepal Length'
-    plt.title(sctTitle)
-    if f_action =='view':
-        plt.show()
-    elif f_action =='save':
-        plt.savefig(sctTitle +'.png')
-    #===================================================================
-    #2. Petal Length(cm)', 'Sepal Length(cm)
-    #===================================================================
-    sns.FacetGrid(iris_df, hue='species', height=5,palette=IrisPallette) \
-        .map(plt.scatter, 'Petal Length(cm)', 'Sepal Length(cm)') \
-        .add_legend() 
-    sctTitle='2. Petal Length vs. Sepal Length'
-    plt.title(sctTitle)
-    if f_action =='view':
-        plt.show()
-    elif f_action =='save':
-        plt.savefig(sctTitle +'.png')
-    #===================================================================
-    #3. Petal Length(cm)', 'Sepal Width(cm)
+    #https://www.geeksforgeeks.org/python-all-possible-pairs-in-list/
+    # All possible pairs in List
+    # Using combinations()
+    varPairs = list(combinations(attributes, 2))
+    print(varPairs)
+    i = 1
+    for y,x in varPairs:
+        sns.FacetGrid(iris_df, hue='species', height=5,palette=IrisPallette) \
+            .map(plt.scatter, y, x) \
+            .add_legend() 
+        #set title
+        sctTitle = str(i) +'. ' + y +' vs.' + x
+        plt.title(sctTitle)
+        if f_action =='view':
+            plt.show()
+        elif f_action =='save':
+            plt.savefig(sctTitle +'.png')
+        i =+1 
 
-    #===================================================================
-    sns.FacetGrid(iris_df, hue='species', height=5,palette=IrisPallette) \
-        .map(plt.scatter, 'Petal Length(cm)', 'Sepal Width(cm)') \
-        .add_legend() 
-    sctTitle='3. Petal Length vs. Sepal Width'
-    plt.title(sctTitle)
-    if f_action =='view':
-        plt.show()
-    elif f_action =='save':
-        plt.savefig(sctTitle +'.png')
     
-    #===================================================================
-    #4. Petal Width(cm)', 'Sepal Length(cm)
-    #===================================================================
-    sns.FacetGrid(iris_df, hue='species', height=5,palette=IrisPallette) \
-        .map(plt.scatter, 'Petal Width(cm)', 'Sepal Length(cm)') \
-        .add_legend() 
-    sctTitle='4. Petal Width vs. Sepal Length'
-    plt.title(sctTitle)
-    if f_action =='view':
-        plt.show()
-    elif f_action =='save':
-        plt.savefig(sctTitle +'.png')
-    
-    #===================================================================
-    #5. Petal Width(cm)', 'Sepal Width(cm)
-    #===================================================================
-    sns.FacetGrid(iris_df, hue='species', height=5,palette=IrisPallette) \
-        .map(plt.scatter, 'Petal Width(cm)', 'Sepal Width(cm)') \
-        .add_legend() 
-    sctTitle='5. Petal Width vs. Sepal Width'
-    plt.title(sctTitle)
-    if f_action =='view':
-        plt.show()
-    elif f_action =='save':
-        plt.savefig(sctTitle +'.png')
-    #===================================================================
-    #5. Petal Width(cm)', 'Sepal Width(cm)
-    #===================================================================
-    sns.FacetGrid(iris_df, hue='species', height=5,palette=IrisPallette) \
-        .map(plt.scatter, 'Petal Width(cm)', 'Petal Length(cm)') \
-        .add_legend() 
-    sctTitle='6. Petal Width vs. Petal Length'
-    plt.title(sctTitle)
-    if f_action =='view':
-        plt.show()
-    elif f_action =='save':
-        plt.savefig(sctTitle +'.png')
-
+'''
 #=================================================================================
 # menu choices, 7 & 8
 #Create overall graphical summary, menu choices 7 & 8

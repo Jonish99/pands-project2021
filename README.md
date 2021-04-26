@@ -9,9 +9,10 @@
 
 The Iris data set is a data science standard for training and demonstration. "What most people know about the Iris data set is that it has records on the length and width measures for sepals and petals. It was originally created by Dr. Edgar Anderson. This data-set consists of 50 records for each of three Iris species: Iris Setosa, Iris Virginica, and Iris Versicolor." (The Iris Dataset — A Little Bit of History and Biology, 2021). It was Sir Ronal Aylmer Fisher who originally used this data set to able to distinguish between the three species of Iris. However, as a side note, Fisher's statistical analysis is less useful than the morphology of the different seeds of these plants noted by Anderson.
 
-Fishers data set is a statistical analysis and this lends itself to analysis in Python. data structures such as a dictionary on a Pandas data-frame. This project will demonstrate how the data-set works and how Python can be used to illustrate this.
-What units are the measurements?
-Variables.
+Fishers data set is a grid or table collection of data and this lends itself to analysis in python using data structures such as a dictionary or a Pandas data-frame. This project will demonstrate how the data-set works and how Python can be used to illustrate this.
+
+
+## Variables.
 The Variables used to differentiate the classes of IRs are sepal length, sepal width, petal length and petal width.
 The species of Iris is also a variable - the documentation for the data-set refers to species as class, but taxonomically the three named iris(Iris-Setosa,Iris-Versicolor,Iris-Virginica) are species (ITIS Standard Report Page: Iris Germanica, 2021)
 Each sample plant that was taken, is not given a sample id in the data-set (other than row number)
@@ -24,8 +25,8 @@ ptlWdth     -float
 irsSpc     -string
 smpId       -int/string
 
-The program.
-1. The program uses the following Python libraries:
+## Analysis.py
+The program is stored in the file analysis.py and be run off command line interface on a computer with python installed and the following python libraries:
 
 
 ```python
@@ -34,20 +35,23 @@ from itertools import combinations
 import seaborn as sns
 import matplotlib.pyplot as plt
 ```
-pandas is a python library that assists data manipulation and handling throug data structures. In this program, pandas data frames are the primary data handling data structure.
 
-combinations from itertools, is a small utility used in this program to create a array of pair values. Used in the program to determine the correct combination of variable pairs when producing scatter plots.
+*pandas* is a python library that assists data manipulation and handling throug data structures. In this program, pandas data frames are the primary data handling data structure.
 
-seaborn is a data visualisation python library based on matplotlib but generates more visually appealing visualisations and is better integrated with pandas for dataframe handling. In this program it generates all of the visualisations. (Misal 2021)
+*combinations* from itertools, is a small utility used in this program to create a array of pair values. Used in the program to determine the correct combination of variable pairs when producing scatter plots.
 
-matplotlib is also data visualisation python library, in the program code it seemingly only deals with the output of visualisation 
+*seaborn* is a data visualisation python library based on matplotlib but generates more visually appealing visualisations and is better integrated with pandas for dataframe handling. In this program it generates all of the visualisations. (Misal 2021)
+
+*matplotlib* is also a data visualisation python library.
+
+Files created by the program are saved in the same directory as the program.
 
 The program creates a default color pallete for seaborn to use throught out the program. 
 ```python
 IrisPallette=['red','green','blue']
 ```
 
-Additional two tuples are created, one containing the variable names, the other the species/class names from the Iris data set. 
+Two tuples are created, one containing the variable names, the other the species/class names from the Iris data set. These are used by various functions within the program.
 ```python
 attributes  =('Sepal Length(cm)','Sepal Width(cm)','Petal Length(cm)','Petal Width(cm)')
 species = ('Iris-setosa','Iris-versicolor','Iris-virginica')
@@ -57,23 +61,18 @@ There is a utility funciton used throughout the program, it's purpose is to tidy
 def cleanLabel(label):
 ```
 
-
-
-
 The following part of this README file explains via the programs menu options how python has been used and how this helps investigate the Iris data set. The business logic of the program is describe and the flow of the program including function calls. However, line line technical explanations are found in the file analysis.py
 
 The main function is called on load by the __main__ variable which ensures that it is this file that will initiate the code in this program.
 
-The main function calls the readCSV function to read the iris data set in to a data frame and returns the data frame(iris_df) to the main program. It is this instance of the data frame  that is a passed to the various menu choice function calls. A data frame is a data structure used to by the Pandas library to handle data. It contains labels, indexes and data in more than data type. (Intro to data structures — pandas 1.2.4 documentation, 2021)
+The main function calls the **readCSV()** function to read the iris data set in to a data-frame and returns the data frame(iris_df) to the main program. It is this instance of the data-frame that is a passed to the various menu choice function calls. A data-frame is a data structure used to by the *pandas* library to handle data. It contains labels, indexes and data in more than data type. (Intro to data structures — pandas 1.2.4 documentation, 2021)
 
-
-
-A user choice is returned to the main() function by the menu(). Each analytical process offers a show and save choice each with the same content. 
 A while loop will ensures the program remains open until the user inputs 'q'
 ```python
 while(choice != 'q'):
 ```
 
+A user choice is returned to the main() function by the menu(). Each analytical process offers a show and save choice each with the same content. 
 
 The choice returned from the menu is passed to an if else statement for all possible conditions.
 
@@ -84,24 +83,20 @@ if choice == '1':
 elif choice == '2':
             create_var_summary(iris_df,'save')
 ```
-In the above snippet the program deals with user choices 1 and 2. Both call the same function, create_var_summary (detailed below) but block is passing a parameter to the function call which will determine the output for the function, *view* or *save*.
-
-
+In the above snippet the program deals with user choices 1 and 2. Both call the same function, create_var_summary (detailed below). All menu choices pass the iris_df dataframe to the function. Each call is also passing a parameter to the function call which will determine the output for the function, *view* or *save*.
 
 ```python
 def create_var_summary(iris_df,output_action):
 ```
-Above shows the functions definition and the named parameters it will receive from the.
-At then end of each main menu call there is a conditional statement to determine how the program will output the analysis. eg.
- #determine view or save action
+Above shows the functions definition and the named parameters it will receive from the function call.
+Within each main function there is a conditional statement to determine how the program will output the analysis. e.g. 
  
-        if output_action =='view':
+        ```python
+if output_action =='view':
             plt.show()
-        elif output_action =='save':
-            plt.savefig(sctTitle +'.png')     
-            
- 
-
+elif output_action =='save':
+            plt.savefig(sctTitle +'.png')
+```
 The program has four principal analytical functions each of which is called with an optional output described above.
 
 **create_var_summary(iris_df,output_action)** - View variable summaries
@@ -112,16 +107,17 @@ The program has four principal analytical functions each of which is called with
 
 **grahical_summary(iris_df,output_action)**  - View all scatter plots and histograms with species identified
 
-1. Variable Summaries. 
+## 1. Variable Summaries. 
+
 ```python
 create_var_summary(iris_df,output_action)
 ```
 
-A table for each variable is displayed with columns for a statistical summary for each species in rows. Each group is stacked vertically.
+A table for each variable is displayed with columns for a statistical summary for species, in rows. Each group is stacked vertically.
 
 The functions users the groupby method of the pandas dataframe to create groups of based for each column grouped by species. Create a group for each species. The .describe() method will create a statistical analys if of the data frame.
 
-The remaining columns (variables) are looped through using the attributes tuple to produce a summary for each variable
+The remaining columns (variables) are looped through using the attributes tuple to produce a summary for each variable.
 The summary is  output depending on the output action.
 
 ```python
@@ -266,7 +262,7 @@ The scatter plots:
 4. graphical summary of plots
 grahical_summary(iris_df,output_action)
 Seaborn pair plot class enables a graphical summary of scatter plots(or other plots) and histograms(or other plots to be output together as one.(seaborn.pairplot — seaborn 0.11.1 documentation, 2021)  It allows combinations of pairs of variables to be shown and analysis of single variables which form a diagonal across the plot.
-the hue parameter enables the species to be identified in the plots based on species. Corner = True, shows only one half of the plots so a not to repeat y and x a axes inverted. This program uses True because no additional information is gained by showing the scatters plots with swapped axes. The diag pararameter determines the plot type for the single variable analysis. In this case hist for hist0gram is chose but box plots cou
+the hue parameter enables the species to be identified in the plots based on species. Corner = True, shows only one half of the plots so a not to repeat y and x a axes inverted. This program uses True because no additional information is gained by showing the scatters plots with swapped axes. The *diag* parameter determines the plot type for the single variable analysis. In this case hist for histogram is chosen, but other plots could have been uses, for example box plots or kde plots.
 
 
 ```python
@@ -288,7 +284,7 @@ Lac.inpe.br. 2021. Data Science Example - Iris dataset. [online] Available at: <
 
 Medium. 2021. The Iris Dataset — A Little Bit of History and Biology. [online] Available at: <https://towardsdatascience.com/the-iris-dataset-a-little-bit-of-history-and-biology-fb4812f5a7b5> [Accessed 18 March 2021]."
 
-# pands-project2021" 
+
 
 Itis.gov. 2021. ITIS Standard Report Page: Iris germanica. [online] Available at: <https://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=43207#null> [Accessed 5 April 2021].
 
@@ -309,14 +305,16 @@ Seaborn.pydata.org. 2021. seaborn.histplot — seaborn 0.11.1 documentation. [on
 Seaborn.pydata.org. 2021. seaborn.FacetGrid — seaborn 0.11.1 documentation. [online] Available at: <https://seaborn.pydata.org/generated/seaborn.FacetGrid.html> [Accessed 20 April 2021].
 https://www.geeksforgeeks.org/box-plot-and-histogram-exploration-on-iris-data/
 
-https://www.kaggle.com/abhishekkrg/python-iris-data-visualization-and-explanation
+Kaggle.com. 2021. Python - IRIS Data visualization and explanation. [online] Available at: <https://www.kaggle.com/abhishekkrg/python-iris-data-visualization-and-explanation> [Accessed 26 April 2021].
 
-https://stackoverflow.com/questions/22691010/how-to-print-a-groupby-object/36951842
+Allan, D., 2021. How to print a groupby object. [online] Stack Overflow. Available at: <https://stackoverflow.com/questions/22691010/how-to-print-a-groupby-object/36951842> [Accessed 20 April 2021].
 
-https://stackoverflow.com/questions/31247198/python-pandas-write-content-of-dataframe-into-text-file  
+Stack Overflow, 2021. Python, Pandas : write content of DataFrame into text File. [online] Stack Overflow. Available at: <https://stackoverflow.com/questions/31247198/python-pandas-write-content-of-dataframe-into-text-file> [Accessed 26 April 2021].
 
 Seaborn.pydata.org. 2021. seaborn.pairplot — seaborn 0.11.1 documentation. [online] Available at: <https://seaborn.pydata.org/generated/seaborn.pairplot.html> [Accessed 26 April 2021].
 
-PridGrid(), H., KKK, F. and S., M., 2021. How to show the title for the diagram of Seaborn pairplot() or PridGrid(). [online] Stack Overflow. Available at: <https://stackoverflow.com/questions/36813396/how-to-show-the-title-for-the-diagram-of-seaborn-pairplot-or-pridgrid> [Accessed 26 April 2021].
+Stack Overflow 2021. How to show the title for the diagram of Seaborn pairplot() or PridGrid(). [online] Stack Overflow. Available at: <https://stackoverflow.com/questions/36813396/how-to-show-the-title-for-the-diagram-of-seaborn-pairplot-or-pridgrid> [Accessed 26 April 2021].
 
 GeeksforGeeks. 2021. Python - All possible pairs in List - GeeksforGeeks. [online] Available at: <https://www.geeksforgeeks.org/python-all-possible-pairs-in-list/> [Accessed 26 April 2021].
+
+Arora, L., 2021. Exception Handling In Python | Try and Except in Python. [online] Analytics Vidhya. Available at: <https://www.analyticsvidhya.com/blog/2020/04/exception-handling-python/> [Accessed 26 April 2021].

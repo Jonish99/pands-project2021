@@ -3,8 +3,6 @@ GMIT - GA_KDATG_L08 Y4. Programming and Scripting Project 2021'''
 
 #Author: Jon Ishaque G00398244
 
-
-
 #====================================IMPORTS==================================
 #IMPORTS
 import pandas as pd  #alias pd
@@ -14,6 +12,7 @@ import seaborn as sns
 #=================================================================================
 #create a palette to be used in the scatter plot which will be consistent with histograms and graphical summary
 IrisPallette=['red','green','blue']
+
 #=================================================================================
 
 #attribute names, a tuple used through out the exploration of the data set. 
@@ -25,7 +24,7 @@ species = ('Iris-setosa','Iris-versicolor','Iris-virginica')
 #===================================== FUNCTIONS =================================
 #=================================================================================
 
-#clean label utiltity funciton to tidy up strings
+#clean label utiltity funciton to tidy up string
 def cleanLabel(label):
     label = label.replace('_',' ')
     label=label.title()
@@ -37,7 +36,7 @@ def cleanLabel(label):
 #it returs the iris dataframe which is pass in turn passed to various functions based on menu choice in main()
 
 def readCSV():
-        #https://www.analyticsvidhya.com/blog/2020/04/exception-handling-python/
+        #(Arora, 2021)
     #Read the whole csv file into the  a pandas dataframe, irisdf - used through this program
     #add column headings.
     col_names  =('Sepal Length(cm)','Sepal Width(cm)','Petal Length(cm)','Petal Width(cm)','species')
@@ -60,7 +59,7 @@ def create_var_summary(iris_df,output_action):
     #this will group the other four columns(variables) based on unique cells in species 
     #(ie 3 species rows in 4 column groups).
     #The describe method creates statistical analyis for each variable.
-    
+    #(Allan, 2021)
     
     attributes_grouped = iris_df.groupby("species").describe()
     #print(attributes_grouped.info())
@@ -74,7 +73,7 @@ def create_var_summary(iris_df,output_action):
             print(attributes_grouped[attr], "\n\n")
         #use input to pause the while loop, whilst use assimilates output.
         x = input("Press any key to return to menu: ")
-    elif output_action=='save':
+    elif output_action=='save': #(Stack Overflow, 2021)
         #open a new copy/overwrite(w) existing verision of txt file to save summaries to.
         with open('Iris_Variable_Summaries.txt', 'w') as f:
             #write file header
@@ -157,7 +156,7 @@ def  create_scatter_plots(iris_df,output_action):
         sctTitle = sctTitle.replace('(cm)','')
         
         plt.title(sctTitle)
-        #adujst top of plot to prevent title being cut off.(PridGrid(), KKK and S., 2021)
+        #adujst top of plot to prevent title being cut off.(Stack Overflow, 2021)
         plt.subplots_adjust(top=0.88)
 
         #determine view or save action
@@ -185,7 +184,7 @@ def grahical_summary(iris_df,output_action):
     #set the style parameter and colors for this use of seaborn
     sns.set(style="white")#background
     #create a paiplot - pp
-    pp=sns.pairplot(iris_df, hue="species", corner=True,diag_kind="hist",palette=IrisPallette)
+    pp=sns.pairplot(iris_df, hue="species", corner=True,diag_kind='hist',palette=IrisPallette)
     #use suptitle to add title to whole graphci 
     pp.fig.suptitle("Graphical summary of paired variable combinations of the Iris Dataset") 
     
@@ -224,6 +223,7 @@ def main():
     #create a menu function to make call variousl anayis methods
 
     #call readCSV to get Iris dataset as dataframe
+    
     iris_df=readCSV()
     #print(iris_df)
     
@@ -233,8 +233,6 @@ def main():
     #use choice input to control flow of main while loop.
     while(choice != 'q'):
         #print("In while")        
-        
-    
         #1 View variable summaries
         if choice == '1':
             create_var_summary(iris_df,'view')

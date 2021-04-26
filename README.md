@@ -165,11 +165,10 @@ x = input("Press any key to return to menu: ")
 
 
 ## 2. Histograms for each variable.
-This function creates a hisotgram for each variable. 
+This function creates a hisotgram for each variable. Distinct histogram peaks for a species in one of the variable may enable identification ot that species
 ```python
 create_var_hist(iris_df,output_action)
 ```
-
 Each species is put into its own dataframe (ir_set, ir_vir, ir_vig).
 
 For example:
@@ -178,7 +177,7 @@ For example:
 ir_set =iris_df[iris_df.species=="Iris-setosa"]
 ```
 This so that 3 plots can be overlain on the same plot.
-The attributes tuple is looped through to create a histogram for each attribute. With 3 separate plots for each species with different color plots. seaborn(sns) histplot is used with matplotlib(plt) to create the scatter plots. Seaborn is used to be so as to create consistent code and visualisation in the program.(seaborn.histplot — seaborn 0.11.1 documentation, 2021).
+The attributes tuple is looped through to create a histogram for each attribute. With 3 separate plots for each species producing different color plots. seaborn(sns) histplot is used with matplotlib(plt) to create the scatter plots. Seaborn is used to be so as to create consistent code and visualisation in the program.(seaborn.histplot — seaborn 0.11.1 documentation, 2021).
 The code formats a title and adds it to the plot. A legend and x and you labels are also passed as parameters.
 ```python
 for attr in attributes:
@@ -212,6 +211,7 @@ After a plot is has been created for each species a legend is added, determining
 
 ## 3. Create a scatter plot for each pair of variables
 
+
 ```python
 create_scatter_plots(iris_df,output_action)
 ```
@@ -238,6 +238,7 @@ Possible pair combinations stored in the *varpairs* data structure:
 
 ('Petal Length(cm)', 'Petal Width(cm)')]
 
+An earlier draft of the program had the plot code repeated six times once for each plot. This became increasingly difficult to maintain as the function developed so a pair data structure was introduced. This also keeps 
 The varPairs data structure is is then used to efficiently create a scatter plot for each pair via loop:
 ```python
 for y,x in varPairs:
@@ -259,6 +260,7 @@ sns.FacetGrid(iris_df, hue='species', height=5,palette=IrisPallette) \
 A number for each plot is added to the title and filename.
 
 ### The six scatter plots:
+
 ![1. Sepal Length vs.Sepal Width](1.%20Sepal%20Length%20vs.Sepal%20Width.png)
 ![2. Sepal Length vs.Petal Length](2.%20Sepal%20Length%20vs.Petal%20Length.png)
 ![3. Sepal Length vs.Petal Width](3.%20Sepal%20Length%20vs.Petal%20Width.png)
@@ -284,8 +286,12 @@ pp=sns.pairplot(iris_df, hue="species", corner=True,diag_kind="hist",palette=Iri
 From the first analysis of the dataset, the variable summaries it was clear that Iris Setosa has a distinctively smaller flower than Iris Virginica and Iris Versicolor. Histogram of petal width and petal length show Iris Virginica to be generally larger with these variables than Iris Versicolor.  
 
 ## Techonology
-The Iris data set csv file was downloade from 
-(Data Science Example - Iris dataset, 2021)
+The Iris data set csv file was downloaded from: 
+http://archive.ics.uci.edu/ml/datasets/Iris
+
+The program was created using VS Code: https://code.visualstudio.com/.
+
+References were created using the website Cite this For M:  https://www.citethisforme.com/
 
 
 ## Refererences:

@@ -8,13 +8,15 @@ GMIT - GA_KDATG_L08 Y4. Programming and Scripting Project 2021'''
 #====================================IMPORTS==================================
 #IMPORTS
 import pandas as pd  #alias pd
-from itertools import combinations
+
+
+from itertools import combinations  #used to created a paired list to simplify the scatter plot creation.
 
 import matplotlib.pyplot as plt #alias plt
-#import os #for os path
-#from matplotlib.colors import ListedColormap #scatter plot colors
+
 import seaborn as sns
-#create a palette to be used in the scatter plot which will be consistent with individual histograms
+
+#create a palette to be used in the scatter plot which will be consistent with histograms and graphical summary
 IrisPallette=['red','green','blue']
 #=================================================================================
 
@@ -23,8 +25,12 @@ col_names  =('Sepal Length(cm)','Sepal Width(cm)','Petal Length(cm)','Petal Widt
 attributes  =('Sepal Length(cm)','Sepal Width(cm)','Petal Length(cm)','Petal Width(cm)')
 #species tuple
 species=('Iris-setosa','Iris-versicolor','Iris-virginica')
-#===================================== FUNCTIONS =================================
 
+#=================================================================================
+#===================================== FUNCTIONS =================================
+#=================================================================================
+
+#clean label utiltity funciton to tidy up strings
 def cleanLabel(label):
     label = label.replace('_',' ')
     label=label.title()
@@ -32,34 +38,25 @@ def cleanLabel(label):
     return label
 
 #=================================================================================
-#https://stackoverflow.com/questions/5360220/how-to-split-a-list-into-pairs-in-all-possible-ways
-#Lifted directly from above
-
-def all_pairs(lst):
-    if len(lst) < 2:
-        yield []
-        return
-    if len(lst) % 2 == 1:
-        # Handle odd length list
-        for i in range(len(lst)):
-            for result in all_pairs(lst[:i] + lst[i+1:]):
-                yield result
-    else:
-        a = lst[0]
-        for i in range(1,len(lst)):
-            pair = (a,lst[i])
-            for rest in all_pairs(lst[1:i]+lst[i+1:]):
-                yield [pair] + rest
-
+#function that reads the whole dataset into a dataframe
+#it returs the iris dataframe which is pass in turn passed to various functions based on menu choice in main()
 
 def readCSV():
+        #https://www.analyticsvidhya.com/blog/2020/04/exception-handling-python/
     #Read the whole csv file into the  a pandas dataframe, irisdf - used through this program
-    irisdf= pd.read_csv("iris_data.csv",  header = None, names =col_names) 
+    try:
+        irisdf= pd.read_csv("iris_data.csv",  header = None, names =col_names) 
+    
+    except FileNotFoundError:
+        print('iris_data.csv not found')
+    except Exception as e:
+        print('ERROR: ', e.message, e.args)
+    
     #returnt to main function
     return irisdf
-
-#=================================================================================
-#Menu choices 1 & 2
+#========================================================================================
+#================================ Menu choices 1 & 2 ====================================
+#========================================================================================
 #Create variable summaries, menu choices 1 & 2
 def create_var_summary(iris_df,f_action):
     #use the groupby method to group the dataframe by the columnspecies, 
@@ -68,12 +65,13 @@ def create_var_summary(iris_df,f_action):
     #The describe method creates statistical analyis for each variable.
     attributes_grouped = iris_df.groupby("species").describe()
     
+    #determine view or save action
     if f_action=='view':
         #print each group stacked vertically
         for attr in attributes:            
             print(cleanLabel(attr))
             print(attributes_grouped[attr], "\n\n")
-        #use input any key to pause the while loop, whilst use assimilates output.
+        #use input to pause the while loop, whilst use assimilates output.
         x = input("Press any key to return to menu: ")
     elif f_action=='save':
         #open a new copy/overwrite(w) existing verision of txt file to save summaries to.
@@ -94,12 +92,10 @@ def create_var_summary(iris_df,f_action):
                 f.write ('\n'+'\n')    
         f.close()
 
-
-#=================================================================================
-#Menu choices 3 & 4
+#================================ Menu choices 3 & 4 ====================================
 #Create variable histogram
-#A useful enhnacement that I was not able to create would be to loop through each of the species.
-#I was not able implement this. Arguabably a nested loop here may be too complicated.
+#A useful enhnacement that I have not yet implemented would be to loop through each of the species.
+# Arguaably a nested loop here may be too complicated.
 #=================================================================================
 def create_var_hist(iris_df,f_action):
     #Get each species into one dataframe
@@ -113,17 +109,22 @@ def create_var_hist(iris_df,f_action):
     for attr in attributes:
         
         plt.figure(figsize = (10, 7))
-        #load each each species into a separate dataframe
-        sns.histplot(ir_set[attr],  kde=False, label='Iris-setosa',color='red')
-        sns.histplot(ir_ver[attr],  kde=False, label='Iris-versicolor',color='green')
-        sns.histplot(ir_vig[attr],  kde=False, label='Iris-virginica',color='blue')
+        #create a histogram for each species which will be overlain oneanother on plt.figure.
+        sns.histplot(ir_set[attr],   label='Iris-setosa',color='red')
+        sns.histplot(ir_ver[attr],   label='Iris-versicolor',color='green')
+        sns.histplot(ir_vig[attr],  label='Iris-virginica',color='blue')
             
+        #add legend
         plt.legend()
+        #create title
         hsTitle = ('Histogram showing {} frequency for the Iris data set').format(cleanLabel(attr))
+        #add title to plots
         plt.title(hsTitle)
+        #add x and y labels to plots
         plt.xlabel(cleanLabel(attr) )
         plt.ylabel('Frequency' )       
         
+        #determine view or save action
         if f_action =='view':
             plt.show()
         elif f_action=='save':
@@ -131,16 +132,12 @@ def create_var_hist(iris_df,f_action):
             plt.savefig(attr.replace('(cm)','') +".png")
      
 
+#================================ Menu choices 5 & 6 ====================================
+#Create scatter plots for variable pair combinations 
 #=================================================================================
-# menu choices 5 & 6
-#Create scatter plots for variable pair combination, 
-#=================================================================================
-
-
 def  create_scatter_plots(iris_df,f_action):
     #https://www.geeksforgeeks.org/python-all-possible-pairs-in-list/
-    # All possible pairs in List
-    # Using combinations()
+    # create a paried list of all pair combinations for scatter plots. (6 not 12)
     varPairs = list(combinations(attributes, 2))
     #print(varPairs)
     #counter for file and title number
@@ -152,26 +149,24 @@ def  create_scatter_plots(iris_df,f_action):
         sns.FacetGrid(iris_df, hue='species', height=5,palette=IrisPallette) \
             .map(plt.scatter, y, x) \
             .add_legend() 
-        #set title
+        #create a title
         sctTitle = str(i) +'. ' + y +' vs.' + x 
         sctTitle = sctTitle.replace('(cm)','')
         
         plt.title(sctTitle)
         #adujst top of plot to prevent title being cut off.
         plt.subplots_adjust(top=0.88)
+
+        #determine view or save action
         if f_action =='view':
             plt.show()
         elif f_action =='save':
-            plt.savefig(sctTitle +'.png')
-        
+            plt.savefig(sctTitle +'.png')        
         i += 1 
         #print (sctTitle)
 
-    
-
-#=================================================================================
-# menu choices, 7 & 8
-#Create overall graphical summary, menu choices 7 & 8
+#================================ Menu choices 7 & 8 ====================================
+#Create overall graphical summary
 #=================================================================================
 def grahical_summary(iris_df,f_action):
     #The six possible pair comparions are best shown together, to determine which (if any)
@@ -184,27 +179,28 @@ def grahical_summary(iris_df,f_action):
     # with the 3 species overlain one another. Other diagonal plots could be used for to visualise each of the four variables.
 
     #set the style parameter and colors for this use of seaborn
-    sns.set(style="white", color_codes=True)
-    
-    g=sns.pairplot(iris_df, hue="species", corner=True,diag_kind="hist",palette=IrisPallette)
+    sns.set(style="white")#background
+    #create a paiplot - pp
+    pp=sns.pairplot(iris_df, hue="species", corner=True,diag_kind="hist",palette=IrisPallette)
     #use suptitle to add title to whole graphci 
-    g.fig.suptitle("Graphical summary of paired variable combinations of the Iris Dataset") 
+    pp.fig.suptitle("Graphical summary of paired variable combinations of the Iris Dataset") 
+    
+    #determine view or save action
     if f_action =='view':
         plt.show()
     elif f_action =='save':
         plt.savefig('Graphical Summary' +'.png')
 
-
-
 #=================================================================================
 def displayMenu():
     #output initial menu with command and instructions for the user.
     print('Please select one of the choices below to explor the Iris data set')
-    print('Each functions of the program has a pair of options, on which allow you to save the output, the other view it on screen')
-    print('The option list progresses in complexity of analyis, the higher the numeric choce. Some users may choose to do this to and gradually explore the data set, others may choose to dive in.')
+    print('Each functions of the program has a pair of options, which allow you to save output or view it on screen')
+    print('The option list progresses in complexity of analyis, the higher the numeric choice.')
+    print(' Users may choose to do this to and gradually explore the data set, or dive in at any point to view analysis.')
     #Output user choices
-    print("What would you like to do?")
-    print("\t(1) View variable summaries")
+    print("What would you like to do? ")
+    print("\n\t(1) View variable summaries")
     print("\t(2) Save variable summaries to txt file")
     print("\t(3) View histogram for each variable")
     print("\t(4) Save histogram for each variable to png file")
@@ -214,7 +210,7 @@ def displayMenu():
     print("\t(8) Save all scatter plots and histograms with species identified")  
     print("\t(q) Quit")
     #get user choice
-    choice = input("Select a choice from the above menu: ").strip()
+    choice = input("\nSelect a choice from the above menu: ")
     #return choice to main menu
     return choice
 
@@ -264,9 +260,6 @@ def main():
             print("Invalid input, plese input an option from the menu.")
         #print("here")
         choice=displayMenu()
-
-            
-    
 
 if __name__=="__main__":
     main()

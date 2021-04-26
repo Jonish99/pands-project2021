@@ -8,23 +8,18 @@ GMIT - GA_KDATG_L08 Y4. Programming and Scripting Project 2021'''
 #====================================IMPORTS==================================
 #IMPORTS
 import pandas as pd  #alias pd
-
-
 from itertools import combinations  #used to created a paired list to simplify the scatter plot creation.
-
 import matplotlib.pyplot as plt #alias plt
-
 import seaborn as sns
-
+#=================================================================================
 #create a palette to be used in the scatter plot which will be consistent with histograms and graphical summary
 IrisPallette=['red','green','blue']
 #=================================================================================
 
 #attribute names, a tuple used through out the exploration of the data set. 
-col_names  =('Sepal Length(cm)','Sepal Width(cm)','Petal Length(cm)','Petal Width(cm)','species')
-attributes  =('Sepal Length(cm)','Sepal Width(cm)','Petal Length(cm)','Petal Width(cm)')
+attributes  = ('Sepal Length(cm)','Sepal Width(cm)','Petal Length(cm)','Petal Width(cm)')
 #species tuple
-species=('Iris-setosa','Iris-versicolor','Iris-virginica')
+species = ('Iris-setosa','Iris-versicolor','Iris-virginica')
 
 #=================================================================================
 #===================================== FUNCTIONS =================================
@@ -44,13 +39,15 @@ def cleanLabel(label):
 def readCSV():
         #https://www.analyticsvidhya.com/blog/2020/04/exception-handling-python/
     #Read the whole csv file into the  a pandas dataframe, irisdf - used through this program
+    #add column headings.
+    col_names  =('Sepal Length(cm)','Sepal Width(cm)','Petal Length(cm)','Petal Width(cm)','species')
     try:
         irisdf= pd.read_csv("iris_data.csv",  header = None, names =col_names) 
     
     except FileNotFoundError:
         print('iris_data.csv not found')
     except Exception as e:
-        print('ERROR: ', e.message, e.args)
+        print('ERROR: ', e)
     
     #returnt to main function
     return irisdf
@@ -58,22 +55,26 @@ def readCSV():
 #================================ Menu choices 1 & 2 ====================================
 #========================================================================================
 #Create variable summaries, menu choices 1 & 2
-def create_var_summary(iris_df,f_action):
+def create_var_summary(iris_df,output_action):
     #use the groupby method to group the dataframe by the columnspecies, 
     #this will group the other four columns(variables) based on unique cells in species 
     #(ie 3 species rows in 4 column groups).
     #The describe method creates statistical analyis for each variable.
+    
+    
     attributes_grouped = iris_df.groupby("species").describe()
+    #print(attributes_grouped.info())
     
     #determine view or save action
-    if f_action=='view':
+    if output_action=='view':
         #print each group stacked vertically
         for attr in attributes:            
-            print(cleanLabel(attr))
+            print(cleanLabel(attr))   
+            print(attributes_grouped[attr].info())                 
             print(attributes_grouped[attr], "\n\n")
         #use input to pause the while loop, whilst use assimilates output.
         x = input("Press any key to return to menu: ")
-    elif f_action=='save':
+    elif output_action=='save':
         #open a new copy/overwrite(w) existing verision of txt file to save summaries to.
         with open('Iris_Variable_Summaries.txt', 'w') as f:
             #write file header
@@ -97,15 +98,17 @@ def create_var_summary(iris_df,f_action):
 #A useful enhnacement that I have not yet implemented would be to loop through each of the species.
 # Arguaably a nested loop here may be too complicated.
 #=================================================================================
-def create_var_hist(iris_df,f_action):
+def create_var_hist(iris_df,output_action):
+    #(seaborn.histplot — seaborn 0.11.1 documentation, 2021)
     #Get each species into one dataframe
     ir_set =iris_df[iris_df.species=="Iris-setosa"]
     ir_ver =iris_df[iris_df.species=="Iris-versicolor"]
     ir_vig =iris_df[iris_df.species=="Iris-virginica"]
 
-    sns.set(style="white", color_codes=True)
+    sns.set(style="white")
     #sns.set_palette("husl")
     
+    #loop throught the attributes creating one histogram for each attribute.
     for attr in attributes:
         
         plt.figure(figsize = (10, 7))
@@ -125,9 +128,9 @@ def create_var_hist(iris_df,f_action):
         plt.ylabel('Frequency' )       
         
         #determine view or save action
-        if f_action =='view':
+        if output_action =='view':
             plt.show()
-        elif f_action=='save':
+        elif output_action=='save':
         #save and clean '(cm)' off file name
             plt.savefig(attr.replace('(cm)','') +".png")
      
@@ -135,8 +138,8 @@ def create_var_hist(iris_df,f_action):
 #================================ Menu choices 5 & 6 ====================================
 #Create scatter plots for variable pair combinations 
 #=================================================================================
-def  create_scatter_plots(iris_df,f_action):
-    #https://www.geeksforgeeks.org/python-all-possible-pairs-in-list/
+def  create_scatter_plots(iris_df,output_action):
+    #(Python - All possible pairs in List - GeeksforGeeks, 2021)
     # create a paried list of all pair combinations for scatter plots. (6 not 12)
     varPairs = list(combinations(attributes, 2))
     #print(varPairs)
@@ -144,7 +147,7 @@ def  create_scatter_plots(iris_df,f_action):
     i = 1
     
     #loop through each pair creating a scatter
-    #use seaborn facetgrid. pass dataframe, hue makes each species a different colour
+    #use seaborn facetgrid. pass dataframe, hue makes each species a different colour (seaborn.FacetGrid — seaborn 0.11.1 documentation, 2021)  
     for y,x in varPairs:
         sns.FacetGrid(iris_df, hue='species', height=5,palette=IrisPallette) \
             .map(plt.scatter, y, x) \
@@ -154,13 +157,13 @@ def  create_scatter_plots(iris_df,f_action):
         sctTitle = sctTitle.replace('(cm)','')
         
         plt.title(sctTitle)
-        #adujst top of plot to prevent title being cut off.
+        #adujst top of plot to prevent title being cut off.(PridGrid(), KKK and S., 2021)
         plt.subplots_adjust(top=0.88)
 
         #determine view or save action
-        if f_action =='view':
+        if output_action =='view':
             plt.show()
-        elif f_action =='save':
+        elif output_action =='save':
             plt.savefig(sctTitle +'.png')        
         i += 1 
         #print (sctTitle)
@@ -168,9 +171,10 @@ def  create_scatter_plots(iris_df,f_action):
 #================================ Menu choices 7 & 8 ====================================
 #Create overall graphical summary
 #=================================================================================
-def grahical_summary(iris_df,f_action):
-    #The six possible pair comparions are best shown together, to determine which (if any)
-    #are better identifiers of species.
+def grahical_summary(iris_df,output_action):
+    #The six possible pair comparions are best shown together, to determine which (if any) are better identifiers of species.. 
+    #This done useing the seaborn pair plot class (seaborn.pairplot — seaborn 0.11.1 documentation, 2021)>
+    
     #Hue enable different identification of each species by assigning a different color to each species
     #the corner parameter enable the plot to show just one half of the diagonal. 
     #The benefit of this is that whilst seeing the plots together is very useful, 
@@ -186,9 +190,9 @@ def grahical_summary(iris_df,f_action):
     pp.fig.suptitle("Graphical summary of paired variable combinations of the Iris Dataset") 
     
     #determine view or save action
-    if f_action =='view':
+    if output_action =='view':
         plt.show()
-    elif f_action =='save':
+    elif output_action =='save':
         plt.savefig('Graphical Summary' +'.png')
 
 #=================================================================================
@@ -204,8 +208,8 @@ def displayMenu():
     print("\t(2) Save variable summaries to txt file")
     print("\t(3) View histogram for each variable")
     print("\t(4) Save histogram for each variable to png file")
-    print("\t(5) View scatter plot for each variable pair comination")
-    print("\t(6) Save scatter plot for each variable pair comination to png file")  
+    print("\t(5) View scatter plot for each variable pair combination")
+    print("\t(6) Save scatter plot for each variable pair combination to png file")  
     print("\t(7) View all scatter plots and histograms with species identified")
     print("\t(8) Save all scatter plots and histograms with species identified")  
     print("\t(q) Quit")

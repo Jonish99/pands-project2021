@@ -197,7 +197,7 @@ for attr in attributes:
         plt.xlabel(cleanLabel(attr) )
         plt.ylabel('Frequency' )
 ```
-### Histogram plots for the four vaiables.
+### Histogram plots for the four variables.
 
 ![Petal Lenth Histogram](Petal%20Length.png)
 
@@ -280,6 +280,7 @@ the hue parameter enables the species to be identified in the plots based on spe
 pp=sns.pairplot(iris_df, hue="species", corner=True,diag_kind="hist",palette=IrisPallette)
 ```
 
+## Other investigations into the Iris data set
 
 
 ## Conclusion

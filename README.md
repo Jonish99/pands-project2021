@@ -16,21 +16,23 @@ Fishers data set is a grid or table collection of data and this lends itself to 
 
 
 ## Variables.
-The Variables used to differentiate the classes of IRs are sepal length, sepal width, petal length and petal width.
-The species of Iris is also a variable - the documentation for the data-set refers to species as class, but taxonomically the three named iris(Iris-Setosa,Iris-Versicolor,Iris-Virginica) are species (ITIS Standard Report Page: Iris Germanica, 2021)
+The Variables used to differentiate the classes of iris are sepal length, sepal width, petal length and petal width.
+The species of iris is also a variable - the documentation for the data-set refers to species as class, but taxonomically the three named iris(Iris-Setosa,Iris-Versicolor,Iris-Virginica) are species (ITIS Standard Report Page: Iris Germanica, 2021)
 Each sample plant that was taken, is not given a sample id in the data-set (other than row number)
-Initially the project will give each sample an id which may or may not be used in the final draft.
 
-splLnght    - float
-splWdh      -float
-ptlLnght    -float
-ptlWdth     -float
-irsSpc     -string
-smpId       -int/string
+Earlier drafts had the variable names as program variables without spaces, however, pandas can handle column names with spaces and they are referenced in the program via a tuple.
+
+Sepal Length(cm)    - float
+Sepal Width(cm)      -float
+Petal Length(cm)    -float
+Petal Width(cm)     -float
+species     -string
+Id       -int/string
+
+
 
 ## Analysis.py
-The program is stored in the file analysis.py and be run off command line interface on a computer with python installed and the following python libraries:
-
+The program is stored in the file analysis.py and can be run from the command line in Windows on a PC with python installed.  The program users the following python libraries:
 
 ```python
 import pandas as pd 
@@ -41,9 +43,9 @@ import matplotlib.pyplot as plt
 
 *pandas* is a python library that assists data manipulation and handling throug data structures. In this program, pandas data frames are the primary data handling data structure.
 
-*combinations* from *itertools*, is a small utility used in this program to create an list of pair values. It ised in the program to determine the correct combination of variable pairs when producing scatter plots.
+*combinations* from *itertools*, is a small utility used in this program to create an list of pair values. It used in the program to determine the correct combination of variable pairs when producing scatter plots.
 
-*seaborn* is a data visualisation python library based on matplotlib but generates more visually appealing visualisations and is better integrated with pandas for data-frame handling. In this program it generates all of the visualisations. (Misal 2021)
+*seaborn* is a data visualisation python library based on matplotlib but generates more visually appealing visualisations and is better integrated with pandas for data-frame handling. In this program it generates all of the visualisations. (Misal, 2021)
 
 *matplotlib* is also a data visualisation python library.
 
@@ -64,20 +66,20 @@ species = ('Iris-setosa','Iris-versicolor','Iris-virginica')
 def cleanLabel(label):
 ```
 
-The following part of this README file explains via the programs menu options how python has been used and how this helps investigate the Iris data set. The business logic of the program is describe and the flow of the program including function calls. However, line by line technical explanations are found in the file analysis.py
+The following part of this README file explains via the programs menu options how python has been used and how this helps investigate the iris data set. The business logic of the program is described and the flow of the program including function calls. However, line by line technical explanations are found in the file Analysis.py
 
-The *main()* function is called on load by the __main__ variable which ensures that it is this file that will initiate the code in this program.
+The *main()* function is called when the program first runs by the *\_\_main__* variable which ensures that it is this file that will initiate the code in this program.
 
 The *main(*) function calls the *readCSV()* function to read the iris data set from *iris_data.csv* into a data-frame and returns the data frame(iris_df) to the main program. It is this instance of the data-frame that is a passed to the various menu choice function calls. A data-frame is a data structure used to by the *pandas* library to handle data, it contains labels, indexes and data in more than data type. (Intro to data structures — pandas 1.2.4 documentation, 2021)
 
-A while loop will ensures the program remains open until the user inputs 'q'
+A while loop  ensures the program remains open until the user inputs 'q'
 ```python
 while(choice != 'q'):
 ```
 
-A user choice is returned to the *main()* function by the *menu()* function. Each analytical process offers a show and save choice each with the same content. 
+A user choice menu is output by function *menu()* called from within main(). Each analytical process offers a choice of *show* or *save* for the same content.
 
-The choice returned from the menu is passed to an if else statement for all possible conditions.
+The choice returned from the menu is passed to an if else block for all avalible options.
 
 A snippet of the if else block handling user choice:
 ```python
@@ -91,7 +93,7 @@ In the above snippet the program deals with user choices 1 and 2. Both call the 
 ```python
 def create_var_summary(iris_df,output_action):
 ```
-Above shows the functions definition and the named parameters it will receive from the function call.
+Above shows the a function definition and the named parameters it will receive from the function call.
 Within each main function there is a conditional statement to determine how the program will output the analysis. e.g. 
 ```python
 if output_action =='view':
@@ -119,19 +121,18 @@ create_var_summary(iris_df,output_action)
 
 A table for each variable is displayed with columns for a statistical summary for species, in rows. Each group is stacked vertically.
 
-The functions users the groupby method of the pandas dataframe to create groups of based for each column grouped by species. Create a group for each species. The .describe() method will create a statistical analys if of the data frame.
+The function uses the *groupby()* method of the pandas data-frame to create groups based for each column grouped by species.  The *.describe()* method creates a statistical analysis  of the data frame.
 
-The remaining columns (variables) are looped through using the attributes tuple to produce a summary for each variable.
-The summary is  output depending on the output action.
+The columns (variables) are looped through using the attributes tuple to produce a summary for each variable. The summary is  output depending on the output action.
 
 ```python
 attributes_grouped = iris_df.groupby("species").describe()
 ```
 
 
-The .info method provides information on the column headings. An index value for each column name, the column name, the count of non_nulls and the data type.
+The *.info()* method provides information on the column headings. An index value for each column name, the column name, the count of non_nulls and the data type.
 It also give the memory allocation of the data provided.
-Below this is the actual statistical output from the describe()
+Below this is the actual statistical output from the *.describe()* method.
 For each species: there is a count giving the size of the sample, the mean measurement, standard deviation and 25th, 50th and 75th percentiles. Maximum and minimum measures are also show. (Python | Pandas Dataframe.describe() method - GeeksforGeeks, 2021)
 ```python
 Petal Width(cm)
@@ -165,20 +166,28 @@ x = input("Press any key to return to menu: ")
 
 
 ## 2. Histograms for each variable.
-This function creates a hisotgram for each variable. Distinct histogram peaks for a species in one of the variable may enable identification ot that species
+This function creates a hisotgram for each variable. Distinct histogram peaks for a species in one of the variables may enable identification of that species
 ```python
 create_var_hist(iris_df,output_action)
 ```
-Each species is put into its own dataframe (ir_set, ir_vir, ir_vig).
+Each species is put into its own data-frame (ir_set, ir_vir, ir_vig).
 
 For example:
 
 ```python
 ir_set =iris_df[iris_df.species=="Iris-setosa"]
 ```
-This so that 3 plots can be overlain on the same plot.
-The attributes tuple is looped through to create a histogram for each attribute. With 3 separate plots for each species producing different color plots. seaborn(sns) histplot is used with matplotlib(plt) to create the scatter plots. Seaborn is used to be so as to create consistent code and visualisation in the program.(seaborn.histplot — seaborn 0.11.1 documentation, 2021).
-The code formats a title and adds it to the plot. A legend and x and you labels are also passed as parameters.
+This is so that 3 plots can be overlain on the same plot.
+The attributes tuple is looped through to create a histogram for each attribute. Based on the each species data-frame (ir_set, ir_vir, ir_vig), three separate plots are produced with a differnet color for each species. 
+```python
+sns.histplot(ir_set[attr],   label='Iris-setosa',color='red')
+sns.histplot(ir_ver[attr],   label='Iris-versicolor',color='green')
+sns.histplot(ir_vig[attr],  label='Iris-virginica',color='blue')
+```
+
+
+seaborn(sns) histplot is used with matplotlib(plt) to create the scatter plots.(seaborn.histplot — seaborn 0.11.1 documentation, 2021). Seaborn has been used to so as to create consistent code and visualisation in the program. 
+
 ```python
 for attr in attributes:
         
@@ -238,14 +247,13 @@ Possible pair combinations stored in the *varpairs* data structure:
 
 ('Petal Length(cm)', 'Petal Width(cm)')]
 
-An earlier draft of the program had the plot code repeated six times once for each plot. This became increasingly difficult to maintain as the function developed so a pair data structure was introduced. This also keeps 
-The varPairs data structure is is then used to efficiently create a scatter plot for each pair via loop:
+An earlier draft of the program had the plot code repeated six times once for each plot. This became increasingly difficult to maintain as the function developed so a pair data structure was introduced. The varPairs data structure is is then used to efficiently create a scatter plot for each pair via loop:
 ```python
 for y,x in varPairs:
 ```
 The first item in the pair being the y axis, and the second being the x axis. 
 
-For each iteration of the loop a scatter plot is created using the seaborn facetgrid class. This class,  uses the matplotlib.scatter class to create a scatter plot. seaborn(sns) facetgrid is used with matplotlib(plt) to create the scatter plots. Seaborn is used so as to create consistent code and visualisation in the program.
+For each iteration of the loop a scatter plot is created using the seaborn facetgrid class. This class in turn uses the matplotlib.scatter class to create a scatter plot. Seaborn(sns) facetgrid is used with matplotlib(plt) to create the scatter plots. Seaborn is used so as to create consistent code and visualisation in the program.
 (seaborn.FacetGrid — seaborn 0.11.1 documentation, 2021)
 ```python
 sns.FacetGrid(iris_df, hue='species', height=5,palette=IrisPallette) \
@@ -270,10 +278,11 @@ A number for each plot is added to the title and filename.
 
 
 
-4. graphical summary of plots
-graphical_summary(iris_df,output_action)
+## 4. Graphical summary of plots
+*graphical_summary(iris_df,output_action)*
+
 Seaborn pair plot class enables a graphical summary of scatter plots(or other plots) and histograms(or other plots to be output together as one.(seaborn.pairplot — seaborn 0.11.1 documentation, 2021)  It allows combinations of pairs of variables to be shown and analysis of single variables which form a diagonal across the plot.
-the hue parameter enables the species to be identified in the plots based on species. Corner = True, shows only one half of the plots so a not to repeat y and x a axes inverted. This program uses True because no additional information is gained by showing the scatters plots with swapped axes. The *diag* parameter determines the plot type for the single variable analysis. In this case hist for histogram is chosen, but other plots could have been uses, for example box plots or kde plots.
+the hue parameter enables the species(or other data class) to be identified in the plots based. *Corner = True,* shows only one half of the plots so a not to repeat y and x a axes swapped around. This program uses True because no additional information is gained by showing the scatters plots with swapped axes. The *diag* parameter determines the plot type for the single variable analysis. In this case hist for histogram is chosen, but other plots could have been uses, for example box plots or *kde* plots.
 
 
 ```python
@@ -284,15 +293,16 @@ pp=sns.pairplot(iris_df, hue="species", corner=True,diag_kind="hist",palette=Iri
 
 
 ## Conclusion
-From the first analysis of the dataset, the variable summaries it was clear that Iris Setosa has a distinctively smaller flower than Iris Virginica and Iris Versicolor. Histogram of petal width and petal length show Iris Virginica to be generally larger with these variables than Iris Versicolor.  
+From the first analysis of the dataset, the variable summaries, it was clear that Iris Setosa has a distinctively smaller flower than Iris Virginica and Iris Versicolor and this pattern continued throughout the analysis. Histogram of petal width and petal length show Iris Virginica to be generally larger with these variables than Iris Versicolor.  
 
-## Techonology
-The Iris data set csv file was downloaded from: 
-http://archive.ics.uci.edu/ml/datasets/Iris
+## Technology
+The Iris data set csv file was downloaded from: http://archive.ics.uci.edu/ml/datasets/Iris
 
 The program was created using VS Code: https://code.visualstudio.com/.
 
-References were created using the website Cite this For M:  https://www.citethisforme.com/
+References were created using the website Cite this For Me:  https://www.citethisforme.com/
+
+The README.md file was created using Markdown Monster: https://markdownmonster.west-wind.com/
 
 
 ## Refererences:

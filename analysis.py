@@ -225,10 +225,10 @@ def grahical_summary(iris_df,output_action):
 #=================================================================================
 def displayMenu():
     #output initial menu with command and instructions for the user.
-    print('Please select one of the choices below to explor the Iris data set')
+    print('Please select one of the choices below to explore the Iris data set')
     print('Each functions of the program has a pair of options, which allow you to save output or view it on screen')
     print('The option list progresses in complexity of analyis, the higher the numeric choice.')
-    print(' Users may choose to do this to and gradually explore the data set, or dive in at any point to view analysis.')
+    print('Users may choose to do this to and gradually explore the data set, or dive in at any point to view analysis.')
     #Output user choices
     print("What would you like to do? ")
     print("\n\t(1) View variable summaries")

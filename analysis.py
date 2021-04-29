@@ -63,16 +63,17 @@ def create_var_summary(iris_df,output_action):
     
     attributes_grouped = iris_df.groupby("species").describe()
     #print(attributes_grouped.info())
-    
+    quit
     #determine view or save action
     if output_action=='view':
         #print each group stacked vertically
         for attr in attributes:            
-            print(cleanLabel(attr))   
-            print(attributes_grouped[attr].info())                 
-            print(attributes_grouped[attr], "\n\n")
-        #use input to pause the while loop, whilst use assimilates output.
-        x = input("Press any key to return to menu: ")
+            print('\t',cleanLabel(attr),'\n')   
+            #write info
+            print(attributes_grouped[attr].info(),'\n')                 
+            print(attributes_grouped[attr], '\n\n')
+            #use input to pause the while loop, whilst use assimilates output.
+        x = input('Press any key to return to menu: ')
     elif output_action=='save': #(Stack Overflow, 2021)
         #open a new copy/overwrite(w) existing verision of txt file to save summaries to.
         with open('Iris_Variable_Summaries.txt', 'w') as f:
@@ -83,14 +84,23 @@ def create_var_summary(iris_df,output_action):
             for attr in attributes:         
             
                 #write variable summary headerheader, using col name and cleaning using clean label function
-                f.write (cleanLabel(attr)+'\n'+'\n')               
-                #new df based on group
+                f.write('\t' )
+                f.write (cleanLabel(attr))  
+                f.write('\n' ) 
+                
                 dfTmp = attributes_grouped[attr]
                 #Iris_Sum_decimals = pd.Series([2,3,2,3,3,3,2], index=['mean', 'std','min','25%','50%','75%','max']) #(pandas.DataFrame.round — pandas 1.2.3 documentation, 2021)
                 dfTmp.round({'mean ':2, 'std ':2,'min ':2,'25% ':2,'50% ':2,'75% ':2,'max ':2}) #Not working                         
+                f.write('\n' )
+                #write info to file
+                dfTmp.info(buf=f)#(Lamanna, 2021)
+                f.write('\n' )
+                #write df to file
                 dfTmp.to_string(f)
+                
                 f.write ('\n'+'\n')    
         f.close()
+        print ('/nIris_Variable_Summaries.txt saved\n')
 
 #================================ Menu choices 3 & 4 ====================================
 #Create variable histogram
@@ -130,8 +140,15 @@ def create_var_hist(iris_df,output_action):
         if output_action =='view':
             plt.show()
         elif output_action=='save':
-        #save and clean '(cm)' off file name
-            plt.savefig(attr.replace('(cm)','') +".png")
+            fn = attr.replace('(cm)','')
+            fn= fn.rstrip()
+            #save and clean '(cm)' off file name
+            try:
+                plt.savefig(fn +'.png')
+                print('{}.png saved'.format(fn))
+            except Exception as e:
+                print('Error  saving ',fn,'.png:',e)
+    print('\n')
      
 
 #================================ Menu choices 5 & 6 ====================================
@@ -159,13 +176,19 @@ def  create_scatter_plots(iris_df,output_action):
         #adujst top of plot to prevent title being cut off.(Stack Overflow, 2021)
         plt.subplots_adjust(top=0.88)
 
+        sctTitle=sctTitle.rstrip()
         #determine view or save action
+
         if output_action =='view':
             plt.show()
         elif output_action =='save':
-            plt.savefig(sctTitle +'.png')        
+            try:
+                plt.savefig(sctTitle +'.png')  
+                print(sctTitle,'.png saved')      
+            except Exception as e:
+                print ('Error saving ',sctTitle,'.png saved: ',e )
         i += 1 
-        #print (sctTitle)
+    print ('\n')
 
 #================================ Menu choices 7 & 8 ====================================
 #Create overall graphical summary
@@ -192,7 +215,12 @@ def grahical_summary(iris_df,output_action):
     if output_action =='view':
         plt.show()
     elif output_action =='save':
-        plt.savefig('Graphical Summary' +'.png')
+        try:
+            plt.savefig('Graphical Summary.png')
+            print('\nGraphical Summary.png saved\n')
+        except Exception as e:
+            print('Error saving graphical summary: ',e)
+            
 
 #=================================================================================
 def displayMenu():

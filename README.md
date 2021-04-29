@@ -325,6 +325,8 @@ Kite.com. 2021. Code Faster with Line-of-Code Completions, Cloudless Processing.
 
 Lac.inpe.br. 2021. Data Science Example - Iris dataset. [online] Available at: <http://www.lac.inpe.br/~rafael.santos/Docs/CAP394/WholeStory-Iris.html> [Accessed 18 March 2021].
 
+Lamanna, F., 2021. how to save output from dataframe info to file a excel or text file. [online] Stack Overflow. Available at: <https://stackoverflow.com/questions/35436331/how-to-save-output-from-dataframe-info-to-file-a-excel-or-text-file> [Accessed 29 April 2021].
+
 Lynn, S., 2021. Python Pandas read_csv: Load Data from CSV Files | Shane Lynn. [online] Shanelynn.ie. Available at: <https://www.shanelynn.ie/python-pandas-read_csv-load-data-from-csv-files/> [Accessed 5 April 2021].
 
 Matthes, E., 2019. Python crash course. San Francisco, CA: No Starch Press.
